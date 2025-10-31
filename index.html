@@ -535,6 +535,25 @@
             font-size: 14px;
         }
 
+        .save-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .item {
                 grid-template-columns: 25px 1fr 50px 60px 40px;
@@ -747,12 +766,18 @@
                 <button class="quick-btn" onclick="applyQuantityToAll(1)">1️⃣ Qtd 1</button>
                 <button class="quick-btn" onclick="applyQuantityToAll(2)">2️⃣ Qtd 2</button>
                 <button class="quick-btn" onclick="autoAdjustQuantities()">🎯 Auto Ajuste</button>
+                <button class="quick-btn" onclick="saveAndCloseModal()">💾 Salvar e Fechar</button>
             </div>
             
             <div id="modalItemsContainer">
                 <!-- Itens do modal serão gerados aqui -->
             </div>
         </div>
+    </div>
+
+    <!-- Notificação de salvamento -->
+    <div class="save-notification" id="saveNotification">
+        ✅ Dados salvos com sucesso!
     </div>
 
     <script>
@@ -841,7 +866,7 @@
             comprasRealizadas: []
         };
 
-        // Carregar dados salvos - CORREÇÃO AQUI
+        // Carregar dados salvos
         let shoppingList = loadShoppingList();
 
         function loadShoppingList() {
@@ -862,6 +887,15 @@
         function saveData() {
             console.log('Salvando dados...', shoppingList);
             localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+            showSaveNotification();
+        }
+
+        function showSaveNotification() {
+            const notification = document.getElementById('saveNotification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000);
         }
 
         function calculateReserva() {
@@ -1207,19 +1241,19 @@
                         <div class="modal-item">
                             <input type="checkbox" class="item-checkbox" 
                                 ${item.checked ? 'checked' : ''}
-                                onchange="toggleModalItem(${subcategoryIndex}, ${itemIndex}, this.checked)">
+                                onchange="toggleModalItem(${categoryIndex}, ${subcategoryIndex}, ${itemIndex}, this.checked)">
                             
                             <div class="item-name">${item.name}</div>
                             
                             <input type="number" class="editable" 
                                 value="${item.quantity}" step="0.1" min="0"
-                                onchange="updateModalQuantity(${subcategoryIndex}, ${itemIndex}, this.value)">
+                                onchange="updateModalQuantity(${categoryIndex}, ${subcategoryIndex}, ${itemIndex}, this.value)">
                             
                             <div class="item-unit">${item.unit}</div>
                             
                             <input type="number" class="editable" 
                                 value="${item.unitPrice.toFixed(2)}" step="0.01" min="0"
-                                onchange="updateModalUnitPrice(${subcategoryIndex}, ${itemIndex}, this.value)">
+                                onchange="updateModalUnitPrice(${categoryIndex}, ${subcategoryIndex}, ${itemIndex}, this.value)">
                             
                             <div class="item-total">R$ ${totalItem}</div>
                         </div>
@@ -1237,64 +1271,69 @@
             renderComprasList();
         }
 
-        function toggleModalItem(subcategoryIndex, itemIndex, checked) {
-            console.log('Toggle modal item:', currentModalCategory, subcategoryIndex, itemIndex, checked);
+        function saveAndCloseModal() {
+            saveData();
+            closeModal();
+        }
+
+        function toggleModalItem(categoryIndex, subcategoryIndex, itemIndex, checked) {
+            console.log('Toggle modal item:', categoryIndex, subcategoryIndex, itemIndex, checked);
             
-            const item = shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex];
+            const item = shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex];
             item.checked = checked;
             
             // Atualizar lista de compras
             if (checked) {
-                addToComprasList(item, currentModalCategory, subcategoryIndex, itemIndex);
+                addToComprasList(item, categoryIndex, subcategoryIndex, itemIndex);
             } else {
-                removeFromComprasList(currentModalCategory, subcategoryIndex, itemIndex);
+                removeFromComprasList(categoryIndex, subcategoryIndex, itemIndex);
             }
             
             saveData();
             renderComprasList();
+            // Atualiza o display do modal imediatamente
+            updateModalItemDisplay(categoryIndex, subcategoryIndex, itemIndex);
         }
 
-        function updateModalQuantity(subcategoryIndex, itemIndex, newQuantity) {
-            console.log('Update modal quantity:', currentModalCategory, subcategoryIndex, itemIndex, newQuantity);
+        function updateModalQuantity(categoryIndex, subcategoryIndex, itemIndex, newQuantity) {
+            console.log('Update modal quantity:', categoryIndex, subcategoryIndex, itemIndex, newQuantity);
             
             const quantity = parseFloat(newQuantity) || 0;
-            const item = shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex];
+            const item = shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex];
             item.quantity = quantity;
             
             saveData();
-            updateModalItemDisplay(subcategoryIndex, itemIndex);
-            updateComprasQuantity(currentModalCategory, subcategoryIndex, itemIndex, quantity);
+            updateModalItemDisplay(categoryIndex, subcategoryIndex, itemIndex);
+            updateComprasQuantity(categoryIndex, subcategoryIndex, itemIndex, quantity);
         }
 
-        function updateModalUnitPrice(subcategoryIndex, itemIndex, newUnitPrice) {
-            console.log('Update modal unit price:', currentModalCategory, subcategoryIndex, itemIndex, newUnitPrice);
+        function updateModalUnitPrice(categoryIndex, subcategoryIndex, itemIndex, newUnitPrice) {
+            console.log('Update modal unit price:', categoryIndex, subcategoryIndex, itemIndex, newUnitPrice);
             
             const price = parseFloat(newUnitPrice) || 0;
-            const item = shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex];
+            const item = shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex];
             item.unitPrice = price;
             
             saveData();
-            updateModalItemDisplay(subcategoryIndex, itemIndex);
-            updateComprasUnitPrice(currentModalCategory, subcategoryIndex, itemIndex, price);
+            updateModalItemDisplay(categoryIndex, subcategoryIndex, itemIndex);
+            updateComprasUnitPrice(categoryIndex, subcategoryIndex, itemIndex, price);
         }
 
-        function updateModalItemDisplay(subcategoryIndex, itemIndex) {
-            const item = shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex];
+        function updateModalItemDisplay(categoryIndex, subcategoryIndex, itemIndex) {
+            const item = shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex];
             const totalItem = calculateItemTotal(item);
             
+            // Encontra o elemento específico no modal e atualiza
             const modalItems = document.querySelectorAll('.modal-item');
-            let currentIndex = 0;
-            
-            shoppingList.categories[currentModalCategory].subcategories.forEach((subcategory, sIndex) => {
-                subcategory.items.forEach((item, iIndex) => {
-                    if (sIndex === subcategoryIndex && iIndex === itemIndex) {
-                        const totalElement = modalItems[currentIndex].querySelector('.item-total');
-                        if (totalElement) {
-                            totalElement.textContent = `R$ ${totalItem}`;
-                        }
+            modalItems.forEach(modalItem => {
+                const checkbox = modalItem.querySelector('.item-checkbox');
+                // Verifica se este é o item correto comparando os eventos
+                if (checkbox && checkbox.getAttribute('onchange').includes(`${categoryIndex}, ${subcategoryIndex}, ${itemIndex}`)) {
+                    const totalElement = modalItem.querySelector('.item-total');
+                    if (totalElement) {
+                        totalElement.textContent = `R$ ${totalItem}`;
                     }
-                    currentIndex++;
-                });
+                }
             });
         }
 
@@ -1306,7 +1345,7 @@
                 });
             });
             saveData();
-            openCategoryModal(currentModalCategory);
+            openCategoryModal(currentModalCategory); // Recarrega o modal com dados atualizados
             renderComprasList();
         }
 
@@ -1318,7 +1357,7 @@
                 });
             });
             saveData();
-            openCategoryModal(currentModalCategory);
+            openCategoryModal(currentModalCategory); // Recarrega o modal com dados atualizados
             renderComprasList();
         }
 
@@ -1329,7 +1368,7 @@
                 });
             });
             saveData();
-            openCategoryModal(currentModalCategory);
+            openCategoryModal(currentModalCategory); // Recarrega o modal com dados atualizados
         }
 
         function autoAdjustQuantities() {
@@ -1345,7 +1384,7 @@
                 });
             });
             saveData();
-            openCategoryModal(currentModalCategory);
+            openCategoryModal(currentModalCategory); // Recarrega o modal com dados atualizados
             updateSuggestionInfo();
         }
 
