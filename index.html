@@ -684,7 +684,7 @@
         </div>
 
         <!-- Lista de Itens Comprados -->
-        <div class="compras-container" id="comprasContainer" style="display: none;">
+        <div class="compras-container" id="comprasContainer">
             <div class="compras-header">
                 <div class="compras-title">🛍️ Itens Comprados</div>
             </div>
@@ -841,11 +841,26 @@
             comprasRealizadas: []
         };
 
-        // Carregar dados salvos
-        let shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || JSON.parse(JSON.stringify(baseShoppingData));
+        // Carregar dados salvos - CORREÇÃO AQUI
+        let shoppingList = loadShoppingList();
+
+        function loadShoppingList() {
+            const saved = localStorage.getItem('shoppingList');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // Garantir que comprasRealizadas existe
+                if (!parsed.comprasRealizadas) {
+                    parsed.comprasRealizadas = [];
+                }
+                return parsed;
+            }
+            return JSON.parse(JSON.stringify(baseShoppingData));
+        }
+
         let currentModalCategory = 0;
 
         function saveData() {
+            console.log('Salvando dados...', shoppingList);
             localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
         }
 
@@ -866,9 +881,13 @@
             categoryElement.classList.toggle('open');
         }
 
-        function toggleItem(categoryIndex, subcategoryIndex, itemIndex, fromModal = false) {
+        function toggleItem(categoryIndex, subcategoryIndex, itemIndex) {
+            console.log('Toggle item:', categoryIndex, subcategoryIndex, itemIndex);
+            
             const item = shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex];
             item.checked = !item.checked;
+            
+            console.log('Item checked:', item.checked);
             
             // Se foi marcado como comprado, adicionar à lista de compras
             if (item.checked) {
@@ -882,18 +901,13 @@
             renderCategories();
             updateBudget();
             renderComprasList();
-            
-            if (!fromModal) {
-                // Se não foi do modal, atualizar o modal se estiver aberto
-                if (document.getElementById('quickEditModal').style.display === 'flex') {
-                    openCategoryModal(currentModalCategory);
-                }
-            }
         }
 
         function addToComprasList(item, categoryIndex, subcategoryIndex, itemIndex) {
+            console.log('Adicionando à lista de compras:', item.name);
+            
             const compra = {
-                id: `${categoryIndex}-${subcategoryIndex}-${itemIndex}`,
+                id: `${categoryIndex}-${subcategoryIndex}-${itemIndex}-${Date.now()}`,
                 name: item.name,
                 quantity: item.quantity,
                 unit: item.unit,
@@ -907,20 +921,39 @@
             };
             
             // Verificar se já existe para não duplicar
-            const existingIndex = shoppingList.comprasRealizadas.findIndex(c => c.id === compra.id);
+            const existingIndex = shoppingList.comprasRealizadas.findIndex(c => 
+                c.categoryIndex === categoryIndex && 
+                c.subcategoryIndex === subcategoryIndex && 
+                c.itemIndex === itemIndex
+            );
+            
             if (existingIndex === -1) {
-                shoppingList.comprasRealizadas.unshift(compra); // Adicionar no início
+                shoppingList.comprasRealizadas.unshift(compra);
+                console.log('Item adicionado à lista de compras:', compra);
+            } else {
+                // Atualizar o existente
+                shoppingList.comprasRealizadas[existingIndex] = compra;
+                console.log('Item atualizado na lista de compras:', compra);
             }
         }
 
         function removeFromComprasList(categoryIndex, subcategoryIndex, itemIndex) {
-            const id = `${categoryIndex}-${subcategoryIndex}-${itemIndex}`;
-            shoppingList.comprasRealizadas = shoppingList.comprasRealizadas.filter(c => c.id !== id);
+            console.log('Removendo da lista de compras:', categoryIndex, subcategoryIndex, itemIndex);
+            
+            shoppingList.comprasRealizadas = shoppingList.comprasRealizadas.filter(c => 
+                !(c.categoryIndex === categoryIndex && 
+                  c.subcategoryIndex === subcategoryIndex && 
+                  c.itemIndex === itemIndex)
+            );
         }
 
         function updateQuantity(categoryIndex, subcategoryIndex, itemIndex, newQuantity) {
+            console.log('Atualizando quantidade:', categoryIndex, subcategoryIndex, itemIndex, newQuantity);
+            
             const quantity = parseFloat(newQuantity) || 0;
-            shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex].quantity = quantity;
+            const item = shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex];
+            item.quantity = quantity;
+            
             saveData();
             renderCategories();
             updateBudget();
@@ -930,8 +963,12 @@
         }
 
         function updateComprasQuantity(categoryIndex, subcategoryIndex, itemIndex, quantity) {
-            const id = `${categoryIndex}-${subcategoryIndex}-${itemIndex}`;
-            const compra = shoppingList.comprasRealizadas.find(c => c.id === id);
+            const compra = shoppingList.comprasRealizadas.find(c => 
+                c.categoryIndex === categoryIndex && 
+                c.subcategoryIndex === subcategoryIndex && 
+                c.itemIndex === itemIndex
+            );
+            
             if (compra) {
                 compra.quantity = quantity;
                 compra.total = calculateItemTotal({
@@ -944,8 +981,12 @@
         }
 
         function updateUnitPrice(categoryIndex, subcategoryIndex, itemIndex, newUnitPrice) {
+            console.log('Atualizando preço:', categoryIndex, subcategoryIndex, itemIndex, newUnitPrice);
+            
             const price = parseFloat(newUnitPrice) || 0;
-            shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex].unitPrice = price;
+            const item = shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex];
+            item.unitPrice = price;
+            
             saveData();
             renderCategories();
             updateBudget();
@@ -955,8 +996,12 @@
         }
 
         function updateComprasUnitPrice(categoryIndex, subcategoryIndex, itemIndex, unitPrice) {
-            const id = `${categoryIndex}-${subcategoryIndex}-${itemIndex}`;
-            const compra = shoppingList.comprasRealizadas.find(c => c.id === id);
+            const compra = shoppingList.comprasRealizadas.find(c => 
+                c.categoryIndex === categoryIndex && 
+                c.subcategoryIndex === subcategoryIndex && 
+                c.itemIndex === itemIndex
+            );
+            
             if (compra) {
                 compra.unitPrice = unitPrice;
                 compra.total = calculateItemTotal({
@@ -1081,8 +1126,9 @@
             const container = document.getElementById('comprasList');
             const comprasContainer = document.getElementById('comprasContainer');
             
+            console.log('Renderizando lista de compras:', shoppingList.comprasRealizadas);
+            
             if (shoppingList.comprasRealizadas.length > 0) {
-                comprasContainer.style.display = 'block';
                 let html = '';
                 
                 shoppingList.comprasRealizadas.forEach(compra => {
@@ -1097,9 +1143,10 @@
                 });
                 
                 container.innerHTML = html;
+                comprasContainer.style.display = 'block';
             } else {
-                comprasContainer.style.display = 'none';
                 container.innerHTML = '<div class="empty-compras">Nenhum item comprado ainda</div>';
+                comprasContainer.style.display = 'block';
             }
         }
 
@@ -1191,16 +1238,14 @@
         }
 
         function toggleModalItem(subcategoryIndex, itemIndex, checked) {
-            shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex].checked = checked;
+            console.log('Toggle modal item:', currentModalCategory, subcategoryIndex, itemIndex, checked);
+            
+            const item = shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex];
+            item.checked = checked;
             
             // Atualizar lista de compras
             if (checked) {
-                addToComprasList(
-                    shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex],
-                    currentModalCategory,
-                    subcategoryIndex,
-                    itemIndex
-                );
+                addToComprasList(item, currentModalCategory, subcategoryIndex, itemIndex);
             } else {
                 removeFromComprasList(currentModalCategory, subcategoryIndex, itemIndex);
             }
@@ -1210,16 +1255,24 @@
         }
 
         function updateModalQuantity(subcategoryIndex, itemIndex, newQuantity) {
+            console.log('Update modal quantity:', currentModalCategory, subcategoryIndex, itemIndex, newQuantity);
+            
             const quantity = parseFloat(newQuantity) || 0;
-            shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex].quantity = quantity;
+            const item = shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex];
+            item.quantity = quantity;
+            
             saveData();
             updateModalItemDisplay(subcategoryIndex, itemIndex);
             updateComprasQuantity(currentModalCategory, subcategoryIndex, itemIndex, quantity);
         }
 
         function updateModalUnitPrice(subcategoryIndex, itemIndex, newUnitPrice) {
+            console.log('Update modal unit price:', currentModalCategory, subcategoryIndex, itemIndex, newUnitPrice);
+            
             const price = parseFloat(newUnitPrice) || 0;
-            shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex].unitPrice = price;
+            const item = shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex];
+            item.unitPrice = price;
+            
             saveData();
             updateModalItemDisplay(subcategoryIndex, itemIndex);
             updateComprasUnitPrice(currentModalCategory, subcategoryIndex, itemIndex, price);
@@ -1396,6 +1449,8 @@
         updateBudget();
         updateSuggestionInfo();
         renderComprasList();
+
+        console.log('Aplicação iniciada com dados:', shoppingList);
     </script>
 </body>
 </html>
