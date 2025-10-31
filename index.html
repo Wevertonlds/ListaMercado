@@ -249,6 +249,7 @@
             <h5>Lista de Compras</h5>
             <div class="search-box">
                 <input type="text" id="searchItem" placeholder="Buscar ou adicionar item..." onkeyup="filterLista()">
+                <button class="btn btn-success mt-2 w-100" onclick="addItemFromInput()">Adicionar Item</button>
             </div>
             <div id="listaContainer"></div>
         </div>
@@ -260,7 +261,7 @@
             <div class="modal-content" style="border-radius:16px;">
                 <div class="modal-header" style="background:var(--primary);color:white;">
                     <h5 class="modal-title">Orçamento por Categoria</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs.dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <p class="text-muted small">Ajuste livre — <strong>Reserva se adapta automaticamente</strong></p>
@@ -628,9 +629,8 @@
             container.innerHTML = html;
         }
 
-        document.getElementById('searchItem').addEventListener('keypress', function(e) {
-            if (e.key !== 'Enter') return;
-            const name = this.value.trim();
+        function addItemFromInput() {
+            const name = document.getElementById('searchItem').value.trim();
             if (!name) return;
 
             let found = false;
@@ -655,9 +655,13 @@
                 });
             }
 
-            this.value = '';
+            document.getElementById('searchItem').value = '';
             saveData();
             renderListaCompras();
+        }
+
+        document.getElementById('searchItem').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addItemFromInput();
         });
 
         function toggleListaItem(i) {
