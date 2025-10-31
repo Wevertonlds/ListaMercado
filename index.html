@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
             line-height: 1.6;
         }
 
@@ -31,76 +31,78 @@
         .header {
             background: linear-gradient(135deg, #4CAF50, #45a049);
             color: white;
-            padding: 30px 20px;
+            padding: 20px 15px;
             text-align: center;
         }
 
         .header h1 {
-            font-size: 2.2em;
-            margin-bottom: 10px;
+            font-size: 1.8em;
+            margin-bottom: 8px;
         }
 
         .budget-config {
             background: #ffeb3b;
             color: #333;
-            padding: 20px;
+            padding: 15px;
         }
 
         .budget-inputs {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 12px;
         }
 
         .budget-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .budget-label {
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 14px;
         }
 
         .budget-input {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
 
         .budget-input input {
-            padding: 10px 15px;
+            padding: 8px 12px;
             border: 2px solid #4CAF50;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 14px;
             font-weight: bold;
             text-align: center;
-            width: 150px;
+            width: 120px;
         }
 
         .budget-input small {
             color: #666;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .budget-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 8px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
+            font-size: 14px;
         }
 
         .btn-primary {
@@ -113,52 +115,52 @@
             color: white;
         }
 
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
         .categories-container {
-            padding: 20px;
+            padding: 15px;
         }
 
         .category {
             background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 5px solid #4CAF50;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
             overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .category:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .category-header {
             background: #e9ecef;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            cursor: pointer;
         }
 
         .category-title {
-            font-size: 1.3em;
+            font-size: 1.1em;
             font-weight: bold;
             color: #333;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .category-budget {
             background: #4CAF50;
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
             font-weight: bold;
+            font-size: 12px;
         }
 
         .items-list {
-            padding: 20px;
+            padding: 15px;
             display: none;
         }
 
@@ -168,11 +170,12 @@
 
         .item {
             display: grid;
-            grid-template-columns: 30px 2fr 80px 80px 100px 100px 100px 60px;
-            gap: 10px;
-            padding: 12px 0;
+            grid-template-columns: 25px 1fr 60px 50px 70px 70px 40px;
+            gap: 8px;
+            padding: 10px 0;
             border-bottom: 1px solid #e9ecef;
             align-items: center;
+            font-size: 14px;
         }
 
         .item:last-child {
@@ -180,26 +183,28 @@
         }
 
         .item-checkbox {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
         }
 
         .item-name {
-            font-size: 16px;
+            font-size: 14px;
+            word-break: break-word;
         }
 
         .item-quantity, .item-unit, .item-price, .item-total {
             text-align: center;
+            font-size: 13px;
         }
 
         .editable {
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 4px;
-            padding: 6px 8px;
+            padding: 4px 6px;
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             width: 100%;
         }
 
@@ -210,39 +215,41 @@
         }
 
         .calculation {
-            font-size: 12px;
+            font-size: 11px;
             color: #666;
             text-align: center;
+            display: none;
         }
 
         .subcategory {
-            margin-left: 20px;
-            padding-left: 20px;
+            margin-left: 15px;
+            padding-left: 15px;
             border-left: 2px solid #dee2e6;
         }
 
         .subcategory-title {
             font-weight: bold;
             color: #555;
-            margin: 15px 0 10px 0;
+            margin: 12px 0 8px 0;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 14px;
         }
 
         .progress-container {
             background: #e9ecef;
-            padding: 20px;
+            padding: 15px;
             border-top: 1px solid #dee2e6;
         }
 
         .progress-bar {
             width: 100%;
-            height: 30px;
+            height: 25px;
             background: #f5f5f5;
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .progress-fill {
@@ -254,21 +261,22 @@
             justify-content: center;
             color: white;
             font-weight: bold;
+            font-size: 12px;
         }
 
         .budget-summary {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
         }
 
         .budget-card {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .budget-card.total {
@@ -292,33 +300,41 @@
         }
 
         .budget-value {
-            font-size: 1.5em;
+            font-size: 1.2em;
             font-weight: bold;
-            margin-top: 5px;
+            margin-top: 4px;
+        }
+
+        .reserva-calculada {
+            font-size: 0.8em;
+            opacity: 0.9;
+            margin-top: 3px;
         }
 
         .tips {
             background: #e3f2fd;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
             border-left: 4px solid #2196F3;
+            font-size: 14px;
         }
 
         .tips h3 {
             color: #1976d2;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            font-size: 16px;
         }
 
         .control-panel {
             background: #f8f9fa;
-            padding: 20px;
+            padding: 15px;
             border-bottom: 1px solid #dee2e6;
             display: flex;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
@@ -333,18 +349,18 @@
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
 
         .delete-btn {
             background: #dc3545;
             color: white;
             border: none;
-            padding: 6px 10px;
-            border-radius: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .delete-btn:hover {
@@ -363,14 +379,15 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 10px;
         }
 
         .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 900px;
-            width: 95%;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 95%;
+            width: 100%;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -379,13 +396,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
             border-bottom: 2px solid #e9ecef;
         }
 
         .modal-title {
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-weight: bold;
             color: #333;
         }
@@ -394,18 +411,20 @@
             background: #dc3545;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
+            padding: 6px 10px;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 12px;
         }
 
         .modal-item {
             display: grid;
-            grid-template-columns: 30px 1fr 100px 80px 100px 100px 100px;
-            gap: 10px;
-            padding: 12px;
+            grid-template-columns: 25px 1fr 70px 50px 80px 70px;
+            gap: 8px;
+            padding: 10px;
             border-bottom: 1px solid #e9ecef;
             align-items: center;
+            font-size: 14px;
         }
 
         .modal-item:last-child {
@@ -414,8 +433,8 @@
 
         .quick-actions {
             display: flex;
-            gap: 10px;
-            margin: 20px 0;
+            gap: 8px;
+            margin: 15px 0;
             flex-wrap: wrap;
         }
 
@@ -423,10 +442,10 @@
             background: #6c757d;
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .quick-btn:hover {
@@ -435,8 +454,8 @@
 
         .category-selector {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
@@ -444,10 +463,11 @@
             background: #e9ecef;
             color: #495057;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 8px 15px;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 12px;
         }
 
         .category-tab.active {
@@ -457,60 +477,107 @@
 
         .suggestion-info {
             background: #e8f5e8;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
             border-left: 4px solid #4CAF50;
+            font-size: 13px;
         }
 
-        .reserva-calculada {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-top: 5px;
+        /* Lista de Comprados */
+        .compras-container {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
         }
 
-        @media (max-width: 1024px) {
+        .compras-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .compras-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .compra-item {
+            display: grid;
+            grid-template-columns: 1fr 60px 70px auto;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 4px solid #28a745;
+            font-size: 14px;
+            align-items: center;
+        }
+
+        .compra-data {
+            font-size: 11px;
+            color: #666;
+            text-align: right;
+        }
+
+        .empty-compras {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
             .item {
-                grid-template-columns: 30px 1fr 80px 100px 100px 60px;
-                gap: 8px;
+                grid-template-columns: 25px 1fr 50px 60px 40px;
+                gap: 6px;
             }
             
-            .item-unit, .calculation {
+            .item-unit, .calculation, .item-price {
                 display: none;
             }
 
             .modal-item {
-                grid-template-columns: 30px 1fr 80px 80px 100px 100px;
-                gap: 8px;
+                grid-template-columns: 25px 1fr 60px 70px 60px;
+                gap: 6px;
             }
 
             .budget-inputs {
                 grid-template-columns: 1fr;
             }
-        }
 
-        @media (max-width: 768px) {
-            .item {
-                grid-template-columns: 1fr;
-                gap: 5px;
-                text-align: left;
+            .compra-item {
+                grid-template-columns: 1fr 50px 60px auto;
+                gap: 8px;
+                font-size: 13px;
             }
-            
-            .budget-summary {
-                grid-template-columns: 1fr;
+
+            .category-header {
+                padding: 12px;
             }
-            
+
+            .category-title {
+                font-size: 1em;
+            }
+
             .control-panel {
                 flex-direction: column;
             }
             
-            button {
+            .btn {
                 width: 100%;
             }
-            
-            .modal-item {
-                grid-template-columns: 1fr;
-                gap: 5px;
+
+            .quick-actions {
+                justify-content: center;
             }
 
             .category-selector {
@@ -530,58 +597,100 @@
                 width: 100%;
             }
         }
+
+        @media (max-width: 480px) {
+            .item {
+                grid-template-columns: 1fr;
+                gap: 4px;
+                text-align: left;
+                padding: 8px 0;
+            }
+
+            .modal-item {
+                grid-template-columns: 1fr;
+                gap: 4px;
+                text-align: left;
+            }
+
+            .compra-item {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+
+            .compra-data {
+                text-align: left;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .budget-summary {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛒 Planejador de Compras Mensal</h1>
+            <h1>🛒 Planejador de Compras</h1>
             <p>Configure seu orçamento e planeje suas compras</p>
         </div>
 
         <div class="budget-config">
-            <h3>💰 Configurar Orçamento do Mês</h3>
+            <h3>💰 Configurar Orçamento</h3>
             <div class="budget-inputs">
                 <div class="budget-group">
                     <div class="budget-label">
-                        💰 Valor Disponível do VR
+                        💰 Valor do VR
                     </div>
                     <div class="budget-input">
                         <input type="number" id="monthlyBudget" value="1040" min="0" step="10">
-                        <small>Valor total do seu VR</small>
+                        <small>Valor total</small>
                     </div>
                 </div>
                 
                 <div class="budget-group">
                     <div class="budget-label">
-                        🏦 Percentual de Reserva
+                        🏦 % Reserva
                     </div>
                     <div class="budget-input">
                         <input type="number" id="reservaPercent" value="5" min="0" max="20" step="0.5">
-                        <small>% para reserva (4-5% recomendado)</small>
+                        <small>4-5% recomendado</small>
                     </div>
                 </div>
             </div>
 
             <div class="budget-actions">
-                <button class="btn btn-primary" onclick="updateBudget()">💾 Atualizar Orçamento</button>
-                <button class="btn btn-secondary" onclick="applyRecommendedReserve()">🎯 Reserva Recomendada (5%)</button>
+                <button class="btn btn-primary" onclick="updateBudget()">💾 Atualizar</button>
+                <button class="btn btn-secondary" onclick="applyRecommendedReserve()">🎯 5% Reserva</button>
+                <button class="btn btn-info" onclick="openQuickEdit()">✏️ Edição Rápida</button>
             </div>
 
             <div class="suggestion-info" id="suggestionInfo">
-                💡 <strong>Sugestão:</strong> Com R$ 1.040,00 e 5% de reserva (R$ 52,00), as quantidades foram ajustadas automaticamente
+                💡 Com R$ 1.040,00 e 5% de reserva (R$ 52,00)
             </div>
         </div>
 
         <div class="control-panel">
-            <button class="btn-primary" onclick="openQuickEdit()">✏️ Edição Rápida</button>
-            <button class="btn-secondary" onclick="markAllAsBought()">✅ Marcar Todos Comprados</button>
-            <button class="btn-success" onclick="resetAll()">🔄 Reiniciar Lista</button>
+            <button class="btn-secondary" onclick="markAllAsBought()">✅ Marcar Comprados</button>
+            <button class="btn-success" onclick="resetAll()">🔄 Reiniciar</button>
             <button class="btn-danger" onclick="clearAll()">🗑️ Limpar Tudo</button>
         </div>
 
         <div class="categories-container" id="categoriesContainer">
             <!-- Categorias serão geradas pelo JavaScript -->
+        </div>
+
+        <!-- Lista de Itens Comprados -->
+        <div class="compras-container" id="comprasContainer" style="display: none;">
+            <div class="compras-header">
+                <div class="compras-title">🛍️ Itens Comprados</div>
+            </div>
+            <div id="comprasList">
+                <!-- Itens comprados serão gerados aqui -->
+            </div>
         </div>
 
         <div class="progress-container">
@@ -592,31 +701,31 @@
             
             <div class="budget-summary">
                 <div class="budget-card total">
-                    <div>Orçamento Total</div>
+                    <div>Total</div>
                     <div class="budget-value" id="totalBudget">R$ 1.040,00</div>
                 </div>
                 <div class="budget-card used">
-                    <div>Valor Usado</div>
+                    <div>Usado</div>
                     <div class="budget-value" id="usedBudget">R$ 0,00</div>
                 </div>
                 <div class="budget-card remaining">
-                    <div>Valor Restante</div>
+                    <div>Restante</div>
                     <div class="budget-value" id="remainingBudget">R$ 1.040,00</div>
                 </div>
                 <div class="budget-card savings">
-                    <div>Reserva Calculada</div>
+                    <div>Reserva</div>
                     <div class="budget-value" id="savingsBudget">R$ 52,00</div>
-                    <div class="reserva-calculada" id="reservaCalculada">5% do orçamento</div>
+                    <div class="reserva-calculada" id="reservaCalculada">5%</div>
                 </div>
             </div>
         </div>
 
         <div class="tips">
             <h3>💡 Como Usar</h3>
-            <p>• <strong>Configure o orçamento</strong> e o percentual de reserva no topo</p>
-            <p>• <strong>Reserva recomendada:</strong> 4-5% para imprevistos</p>
-            <p>• <strong>As quantidades são ajustadas</strong> automaticamente baseadas no valor disponível para compras</p>
-            <p>• <strong>Edição Rápida</strong> permite ajustar manualmente sem perder as sugestões</p>
+            <p>• Configure orçamento e reserva no topo</p>
+            <p>• Clique nas categorias para expandir</p>
+            <p>• Use Edição Rápida para ajustes em massa</p>
+            <p>• Itens comprados aparecem na lista abaixo</p>
         </div>
     </div>
 
@@ -633,12 +742,11 @@
             </div>
             
             <div class="quick-actions">
-                <button class="quick-btn" onclick="selectAllInModal()">✅ Selecionar Todos</button>
-                <button class="quick-btn" onclick="deselectAllInModal()">❌ Desmarcar Todos</button>
-                <button class="quick-btn" onclick="applyQuantityToAll(1)">1️⃣ Quantidade 1</button>
-                <button class="quick-btn" onclick="applyQuantityToAll(2)">2️⃣ Quantidade 2</button>
-                <button class="quick-btn" onclick="applyQuantityToAll(3)">3️⃣ Quantidade 3</button>
-                <button class="quick-btn" onclick="autoAdjustQuantities()">🎯 Ajuste Automático</button>
+                <button class="quick-btn" onclick="selectAllInModal()">✅ Todos</button>
+                <button class="quick-btn" onclick="deselectAllInModal()">❌ Nenhum</button>
+                <button class="quick-btn" onclick="applyQuantityToAll(1)">1️⃣ Qtd 1</button>
+                <button class="quick-btn" onclick="applyQuantityToAll(2)">2️⃣ Qtd 2</button>
+                <button class="quick-btn" onclick="autoAdjustQuantities()">🎯 Auto Ajuste</button>
             </div>
             
             <div id="modalItemsContainer">
@@ -655,104 +763,85 @@
             categories: [
                 {
                     id: 'alimentos',
-                    name: '🥦 Alimentos (feira e mercearia)',
+                    name: '🥦 Alimentos',
                     budget: 600,
                     subcategories: [
                         {
-                            name: '🥖 Básicos da despensa',
+                            name: '🥖 Básicos',
                             items: [
                                 { name: 'Arroz 5kg', quantity: 2, unit: 'pacotes', unitPrice: 28.00, checked: false, baseQuantity: 2 },
-                                { name: 'Feijão carioca 1kg', quantity: 3, unit: 'pacotes', unitPrice: 9.50, checked: false, baseQuantity: 3 },
+                                { name: 'Feijão 1kg', quantity: 3, unit: 'pacotes', unitPrice: 9.50, checked: false, baseQuantity: 3 },
                                 { name: 'Macarrão 500g', quantity: 4, unit: 'un', unitPrice: 4.20, checked: false, baseQuantity: 4 },
-                                { name: 'Molho de tomate', quantity: 4, unit: 'sachês', unitPrice: 3.20, checked: false, baseQuantity: 4 },
-                                { name: 'Farinha de trigo 1kg', quantity: 1, unit: 'pacote', unitPrice: 6.80, checked: false, baseQuantity: 1 },
-                                { name: 'Óleo de soja 900ml', quantity: 2, unit: 'garrafas', unitPrice: 9.90, checked: false, baseQuantity: 2 },
-                                { name: 'Sal 1kg', quantity: 1, unit: 'pacote', unitPrice: 3.50, checked: false, baseQuantity: 1 },
-                                { name: 'Açúcar 1kg', quantity: 2, unit: 'pacotes', unitPrice: 5.80, checked: false, baseQuantity: 2 },
-                                { name: 'Café 500g', quantity: 2, unit: 'pacotes', unitPrice: 18.90, checked: false, baseQuantity: 2 },
-                                { name: 'Leite longa vida 1L', quantity: 12, unit: 'caixas', unitPrice: 5.20, checked: false, baseQuantity: 12 }
+                                { name: 'Molho tomate', quantity: 4, unit: 'sachês', unitPrice: 3.20, checked: false, baseQuantity: 4 },
+                                { name: 'Farinha trigo', quantity: 1, unit: 'pacote', unitPrice: 6.80, checked: false, baseQuantity: 1 },
+                                { name: 'Óleo soja', quantity: 2, unit: 'garrafas', unitPrice: 9.90, checked: false, baseQuantity: 2 }
                             ]
                         },
                         {
-                            name: '🥕 Hortifruti (Feira)',
+                            name: '🥕 Hortifruti',
                             items: [
                                 { name: 'Batata', quantity: 3, unit: 'kg', unitPrice: 5.50, checked: false, baseQuantity: 3 },
                                 { name: 'Cebola', quantity: 2, unit: 'kg', unitPrice: 6.80, checked: false, baseQuantity: 2 },
                                 { name: 'Tomate', quantity: 2, unit: 'kg', unitPrice: 8.90, checked: false, baseQuantity: 2 },
                                 { name: 'Alface', quantity: 2, unit: 'maços', unitPrice: 3.50, checked: false, baseQuantity: 2 },
-                                { name: 'Cenoura', quantity: 1, unit: 'kg', unitPrice: 4.20, checked: false, baseQuantity: 1 },
-                                { name: 'Banana', quantity: 2, unit: 'kg', unitPrice: 7.80, checked: false, baseQuantity: 2 },
-                                { name: 'Maçã', quantity: 1, unit: 'kg', unitPrice: 8.90, checked: false, baseQuantity: 1 },
-                                { name: 'Laranja', quantity: 1, unit: 'kg', unitPrice: 4.50, checked: false, baseQuantity: 1 }
-                            ]
-                        },
-                        {
-                            name: '🍶 Frios e laticínios',
-                            items: [
-                                { name: 'Queijo mussarela', quantity: 500, unit: 'g', unitPrice: 0.0498, checked: false, baseQuantity: 500 },
-                                { name: 'Presunto', quantity: 500, unit: 'g', unitPrice: 0.0338, checked: false, baseQuantity: 500 },
-                                { name: 'Iogurte natural', quantity: 4, unit: 'un', unitPrice: 3.80, checked: false, baseQuantity: 4 },
-                                { name: 'Requeijão 200g', quantity: 1, unit: 'pote', unitPrice: 9.90, checked: false, baseQuantity: 1 },
-                                { name: 'Ovos brancos', quantity: 30, unit: 'un', unitPrice: 0.763, checked: false, baseQuantity: 30 }
+                                { name: 'Cenoura', quantity: 1, unit: 'kg', unitPrice: 4.20, checked: false, baseQuantity: 1 }
                             ]
                         }
                     ]
                 },
                 {
                     id: 'acougue',
-                    name: '🥩 Açougue / Proteínas',
+                    name: '🥩 Proteínas',
                     budget: 220,
                     subcategories: [
                         {
-                            name: '🍗 Carnes e Proteínas',
+                            name: '🍗 Carnes',
                             items: [
-                                { name: 'Coxa/sobrecoxa de frango', quantity: 3, unit: 'kg', unitPrice: 17.33, checked: false, baseQuantity: 3 },
-                                { name: 'Peito de frango', quantity: 1.5, unit: 'kg', unitPrice: 25.33, checked: false, baseQuantity: 1.5 },
+                                { name: 'Frango', quantity: 3, unit: 'kg', unitPrice: 17.33, checked: false, baseQuantity: 3 },
+                                { name: 'Peito frango', quantity: 1.5, unit: 'kg', unitPrice: 25.33, checked: false, baseQuantity: 1.5 },
                                 { name: 'Carne moída', quantity: 1, unit: 'kg', unitPrice: 42.00, checked: false, baseQuantity: 1 },
-                                { name: 'Linguiça toscana', quantity: 1, unit: 'kg', unitPrice: 28.90, checked: false, baseQuantity: 1 },
-                                { name: 'Salsicha', quantity: 1, unit: 'kg', unitPrice: 18.90, checked: false, baseQuantity: 1 }
+                                { name: 'Linguiça', quantity: 1, unit: 'kg', unitPrice: 28.90, checked: false, baseQuantity: 1 }
                             ]
                         }
                     ]
                 },
                 {
                     id: 'limpeza',
-                    name: '🧼 Limpeza doméstica',
+                    name: '🧼 Limpeza',
                     budget: 100,
                     subcategories: [
                         {
-                            name: '🧽 Produtos de Limpeza',
+                            name: '🧽 Produtos',
                             items: [
-                                { name: 'Detergente 500ml', quantity: 2, unit: 'un', unitPrice: 3.20, checked: false, baseQuantity: 2 },
-                                { name: 'Sabão em pó 1kg', quantity: 1, unit: 'pacote', unitPrice: 15.90, checked: false, baseQuantity: 1 },
-                                { name: 'Amaciante 2L', quantity: 1, unit: 'un', unitPrice: 12.90, checked: false, baseQuantity: 1 },
-                                { name: 'Desinfetante 2L', quantity: 1, unit: 'un', unitPrice: 8.90, checked: false, baseQuantity: 1 },
-                                { name: 'Água sanitária 2L', quantity: 1, unit: 'un', unitPrice: 6.50, checked: false, baseQuantity: 1 }
+                                { name: 'Detergente', quantity: 2, unit: 'un', unitPrice: 3.20, checked: false, baseQuantity: 2 },
+                                { name: 'Sabão pó', quantity: 1, unit: 'pacote', unitPrice: 15.90, checked: false, baseQuantity: 1 },
+                                { name: 'Amaciante', quantity: 1, unit: 'un', unitPrice: 12.90, checked: false, baseQuantity: 1 },
+                                { name: 'Desinfetante', quantity: 1, unit: 'un', unitPrice: 8.90, checked: false, baseQuantity: 1 }
                             ]
                         }
                     ]
                 },
                 {
                     id: 'higiene',
-                    name: '🚿 Higiene pessoal',
+                    name: '🚿 Higiene',
                     budget: 80,
                     subcategories: [
                         {
-                            name: '🧴 Produtos de Higiene',
+                            name: '🧴 Produtos',
                             items: [
-                                { name: 'Sabonete 90g', quantity: 8, unit: 'un', unitPrice: 1.80, checked: false, baseQuantity: 8 },
-                                { name: 'Shampoo 350ml', quantity: 1, unit: 'frasco', unitPrice: 18.90, checked: false, baseQuantity: 1 },
-                                { name: 'Condicionador 350ml', quantity: 1, unit: 'frasco', unitPrice: 16.90, checked: false, baseQuantity: 1 },
-                                { name: 'Pasta de dente 90g', quantity: 2, unit: 'un', unitPrice: 5.90, checked: false, baseQuantity: 2 },
-                                { name: 'Papel higiênico 30m', quantity: 4, unit: 'rolos', unitPrice: 4.725, checked: false, baseQuantity: 4 }
+                                { name: 'Sabonete', quantity: 8, unit: 'un', unitPrice: 1.80, checked: false, baseQuantity: 8 },
+                                { name: 'Shampoo', quantity: 1, unit: 'frasco', unitPrice: 18.90, checked: false, baseQuantity: 1 },
+                                { name: 'Condicionador', quantity: 1, unit: 'frasco', unitPrice: 16.90, checked: false, baseQuantity: 1 },
+                                { name: 'Pasta dental', quantity: 2, unit: 'un', unitPrice: 5.90, checked: false, baseQuantity: 2 }
                             ]
                         }
                     ]
                 }
-            ]
+            ],
+            comprasRealizadas: []
         };
 
-        // Carregar dados salvos ou usar os dados base
+        // Carregar dados salvos
         let shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || JSON.parse(JSON.stringify(baseShoppingData));
         let currentModalCategory = 0;
 
@@ -772,27 +861,61 @@
             return (item.unitPrice * item.quantity).toFixed(2);
         }
 
-        function getDisplayPrice(item) {
-            if (item.unit === 'g') {
-                return `R$ ${(item.unitPrice * 1000).toFixed(2)}/kg`;
-            }
-            if (item.unit === 'kg') {
-                return `R$ ${item.unitPrice.toFixed(2)}/kg`;
-            }
-            return `R$ ${item.unitPrice.toFixed(2)}`;
-        }
-
         function toggleCategory(categoryIndex) {
             const categoryElement = document.querySelectorAll('.category')[categoryIndex];
             categoryElement.classList.toggle('open');
         }
 
-        function toggleItem(categoryIndex, subcategoryIndex, itemIndex) {
-            shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex].checked = 
-            !shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex].checked;
+        function toggleItem(categoryIndex, subcategoryIndex, itemIndex, fromModal = false) {
+            const item = shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items[itemIndex];
+            item.checked = !item.checked;
+            
+            // Se foi marcado como comprado, adicionar à lista de compras
+            if (item.checked) {
+                addToComprasList(item, categoryIndex, subcategoryIndex, itemIndex);
+            } else {
+                // Se foi desmarcado, remover da lista de compras
+                removeFromComprasList(categoryIndex, subcategoryIndex, itemIndex);
+            }
+            
             saveData();
             renderCategories();
             updateBudget();
+            renderComprasList();
+            
+            if (!fromModal) {
+                // Se não foi do modal, atualizar o modal se estiver aberto
+                if (document.getElementById('quickEditModal').style.display === 'flex') {
+                    openCategoryModal(currentModalCategory);
+                }
+            }
+        }
+
+        function addToComprasList(item, categoryIndex, subcategoryIndex, itemIndex) {
+            const compra = {
+                id: `${categoryIndex}-${subcategoryIndex}-${itemIndex}`,
+                name: item.name,
+                quantity: item.quantity,
+                unit: item.unit,
+                unitPrice: item.unitPrice,
+                total: calculateItemTotal(item),
+                data: new Date().toLocaleDateString('pt-BR'),
+                hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                categoryIndex: categoryIndex,
+                subcategoryIndex: subcategoryIndex,
+                itemIndex: itemIndex
+            };
+            
+            // Verificar se já existe para não duplicar
+            const existingIndex = shoppingList.comprasRealizadas.findIndex(c => c.id === compra.id);
+            if (existingIndex === -1) {
+                shoppingList.comprasRealizadas.unshift(compra); // Adicionar no início
+            }
+        }
+
+        function removeFromComprasList(categoryIndex, subcategoryIndex, itemIndex) {
+            const id = `${categoryIndex}-${subcategoryIndex}-${itemIndex}`;
+            shoppingList.comprasRealizadas = shoppingList.comprasRealizadas.filter(c => c.id !== id);
         }
 
         function updateQuantity(categoryIndex, subcategoryIndex, itemIndex, newQuantity) {
@@ -801,6 +924,23 @@
             saveData();
             renderCategories();
             updateBudget();
+            
+            // Atualizar também na lista de compras se o item estiver comprado
+            updateComprasQuantity(categoryIndex, subcategoryIndex, itemIndex, quantity);
+        }
+
+        function updateComprasQuantity(categoryIndex, subcategoryIndex, itemIndex, quantity) {
+            const id = `${categoryIndex}-${subcategoryIndex}-${itemIndex}`;
+            const compra = shoppingList.comprasRealizadas.find(c => c.id === id);
+            if (compra) {
+                compra.quantity = quantity;
+                compra.total = calculateItemTotal({
+                    unitPrice: compra.unitPrice,
+                    quantity: quantity
+                });
+                saveData();
+                renderComprasList();
+            }
         }
 
         function updateUnitPrice(categoryIndex, subcategoryIndex, itemIndex, newUnitPrice) {
@@ -809,6 +949,23 @@
             saveData();
             renderCategories();
             updateBudget();
+            
+            // Atualizar também na lista de compras se o item estiver comprado
+            updateComprasUnitPrice(categoryIndex, subcategoryIndex, itemIndex, price);
+        }
+
+        function updateComprasUnitPrice(categoryIndex, subcategoryIndex, itemIndex, unitPrice) {
+            const id = `${categoryIndex}-${subcategoryIndex}-${itemIndex}`;
+            const compra = shoppingList.comprasRealizadas.find(c => c.id === id);
+            if (compra) {
+                compra.unitPrice = unitPrice;
+                compra.total = calculateItemTotal({
+                    unitPrice: unitPrice,
+                    quantity: compra.quantity
+                });
+                saveData();
+                renderComprasList();
+            }
         }
 
         function calculateCategoryTotal(category) {
@@ -850,9 +1007,8 @@
             document.getElementById('remainingBudget').textContent = `R$ ${remaining.toFixed(2)}`;
             document.getElementById('totalBudget').textContent = `R$ ${shoppingList.totalBudget.toFixed(2)}`;
             document.getElementById('savingsBudget').textContent = `R$ ${reserva.toFixed(2)}`;
-            document.getElementById('reservaCalculada').textContent = `${shoppingList.reservaPercent}% do orçamento`;
+            document.getElementById('reservaCalculada').textContent = `${shoppingList.reservaPercent}%`;
 
-            // Atualizar orçamento por categoria
             document.querySelectorAll('.category-budget').forEach((element, index) => {
                 const category = shoppingList.categories[index];
                 const remainingCategory = category.budget - calculateCategoryTotal(category);
@@ -868,13 +1024,13 @@
                 const remainingCategory = category.budget - calculateCategoryTotal(category);
                 
                 html += `
-                    <div class="category" onclick="toggleCategory(${categoryIndex})">
-                        <div class="category-header">
+                    <div class="category">
+                        <div class="category-header" onclick="toggleCategory(${categoryIndex})">
                             <div class="category-title">
                                 ${category.name}
                             </div>
                             <div class="category-budget">
-                                R$ ${remainingCategory.toFixed(2)} / R$ ${category.budget.toFixed(2)}
+                                R$ ${remainingCategory.toFixed(2)}
                             </div>
                         </div>
                         <div class="items-list">
@@ -888,10 +1044,9 @@
 
                     subcategory.items.forEach((item, itemIndex) => {
                         const totalItem = calculateItemTotal(item);
-                        const displayPrice = getDisplayPrice(item);
                         
                         html += `
-                            <div class="item" onclick="event.stopPropagation()">
+                            <div class="item">
                                 <input type="checkbox" class="item-checkbox" 
                                     ${item.checked ? 'checked' : ''}
                                     onchange="toggleItem(${categoryIndex}, ${subcategoryIndex}, ${itemIndex})">
@@ -904,15 +1059,11 @@
                                 
                                 <div class="item-unit">${item.unit}</div>
                                 
-                                <input type="number" class="editable item-price" 
-                                    value="${item.unitPrice.toFixed(2)}" step="0.01" min="0"
-                                    onchange="updateUnitPrice(${categoryIndex}, ${subcategoryIndex}, ${itemIndex}, this.value)">
-                                
-                                <div class="calculation">${item.quantity} × ${item.unitPrice.toFixed(2)}</div>
+                                <div class="item-price">R$ ${item.unitPrice.toFixed(2)}</div>
                                 
                                 <div class="item-total">R$ ${totalItem}</div>
                                 
-                                <button class="delete-btn" onclick="deleteItem(${categoryIndex}, ${subcategoryIndex}, ${itemIndex})">🗑️</button>
+                                <button class="delete-btn" onclick="event.stopPropagation(); deleteItem(${categoryIndex}, ${subcategoryIndex}, ${itemIndex})">🗑️</button>
                             </div>
                         `;
                     });
@@ -926,12 +1077,40 @@
             container.innerHTML = html;
         }
 
+        function renderComprasList() {
+            const container = document.getElementById('comprasList');
+            const comprasContainer = document.getElementById('comprasContainer');
+            
+            if (shoppingList.comprasRealizadas.length > 0) {
+                comprasContainer.style.display = 'block';
+                let html = '';
+                
+                shoppingList.comprasRealizadas.forEach(compra => {
+                    html += `
+                        <div class="compra-item">
+                            <div class="compra-name">${compra.name}</div>
+                            <div class="compra-quantity">${compra.quantity} ${compra.unit}</div>
+                            <div class="compra-total">R$ ${compra.total}</div>
+                            <div class="compra-data">${compra.data} ${compra.hora}</div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+            } else {
+                comprasContainer.style.display = 'none';
+                container.innerHTML = '<div class="empty-compras">Nenhum item comprado ainda</div>';
+            }
+        }
+
         function deleteItem(categoryIndex, subcategoryIndex, itemIndex) {
-            if (confirm('Tem certeza que deseja excluir este item?')) {
+            if (confirm('Excluir este item?')) {
                 shoppingList.categories[categoryIndex].subcategories[subcategoryIndex].items.splice(itemIndex, 1);
+                removeFromComprasList(categoryIndex, subcategoryIndex, itemIndex);
                 saveData();
                 renderCategories();
                 updateBudget();
+                renderComprasList();
             }
         }
 
@@ -1008,11 +1187,26 @@
             document.getElementById('quickEditModal').style.display = 'none';
             renderCategories();
             updateBudget();
+            renderComprasList();
         }
 
         function toggleModalItem(subcategoryIndex, itemIndex, checked) {
             shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex].checked = checked;
+            
+            // Atualizar lista de compras
+            if (checked) {
+                addToComprasList(
+                    shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex],
+                    currentModalCategory,
+                    subcategoryIndex,
+                    itemIndex
+                );
+            } else {
+                removeFromComprasList(currentModalCategory, subcategoryIndex, itemIndex);
+            }
+            
             saveData();
+            renderComprasList();
         }
 
         function updateModalQuantity(subcategoryIndex, itemIndex, newQuantity) {
@@ -1020,6 +1214,7 @@
             shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex].quantity = quantity;
             saveData();
             updateModalItemDisplay(subcategoryIndex, itemIndex);
+            updateComprasQuantity(currentModalCategory, subcategoryIndex, itemIndex, quantity);
         }
 
         function updateModalUnitPrice(subcategoryIndex, itemIndex, newUnitPrice) {
@@ -1027,6 +1222,7 @@
             shoppingList.categories[currentModalCategory].subcategories[subcategoryIndex].items[itemIndex].unitPrice = price;
             saveData();
             updateModalItemDisplay(subcategoryIndex, itemIndex);
+            updateComprasUnitPrice(currentModalCategory, subcategoryIndex, itemIndex, price);
         }
 
         function updateModalItemDisplay(subcategoryIndex, itemIndex) {
@@ -1050,23 +1246,27 @@
         }
 
         function selectAllInModal() {
-            shoppingList.categories[currentModalCategory].subcategories.forEach(subcategory => {
-                subcategory.items.forEach(item => {
+            shoppingList.categories[currentModalCategory].subcategories.forEach((subcategory, subcategoryIndex) => {
+                subcategory.items.forEach((item, itemIndex) => {
                     item.checked = true;
+                    addToComprasList(item, currentModalCategory, subcategoryIndex, itemIndex);
                 });
             });
             saveData();
             openCategoryModal(currentModalCategory);
+            renderComprasList();
         }
 
         function deselectAllInModal() {
-            shoppingList.categories[currentModalCategory].subcategories.forEach(subcategory => {
-                subcategory.items.forEach(item => {
+            shoppingList.categories[currentModalCategory].subcategories.forEach((subcategory, subcategoryIndex) => {
+                subcategory.items.forEach((item, itemIndex) => {
                     item.checked = false;
+                    removeFromComprasList(currentModalCategory, subcategoryIndex, itemIndex);
                 });
             });
             saveData();
             openCategoryModal(currentModalCategory);
+            renderComprasList();
         }
 
         function applyQuantityToAll(quantity) {
@@ -1081,7 +1281,7 @@
 
         function autoAdjustQuantities() {
             const budgetForShopping = calculateBudgetForShopping();
-            const budgetRatio = budgetForShopping / 988; // 1040 - 5% = 988 (base original)
+            const budgetRatio = budgetForShopping / 988;
             
             shoppingList.categories.forEach(category => {
                 category.subcategories.forEach(subcategory => {
@@ -1127,14 +1327,11 @@
             
             let message = '';
             if (budget > 1040) {
-                message = `💡 <strong>Orçamento maior!</strong> Com R$ ${budget.toFixed(2)} e ${shoppingList.reservaPercent}% de reserva (R$ ${reserva.toFixed(2)}), você tem R$ ${budgetForShopping.toFixed(2)} para compras. As quantidades foram aumentadas.`;
-                infoElement.style.background = '#e8f5e8';
+                message = `💡 Com R$ ${budget.toFixed(2)} e ${shoppingList.reservaPercent}% reserva (R$ ${reserva.toFixed(2)})`;
             } else if (budget < 1040) {
-                message = `💡 <strong>Orçamento reduzido.</strong> Com R$ ${budget.toFixed(2)} e ${shoppingList.reservaPercent}% de reserva (R$ ${reserva.toFixed(2)}), você tem R$ ${budgetForShopping.toFixed(2)} para compras. As quantidades foram ajustadas.`;
-                infoElement.style.background = '#fff3cd';
+                message = `💡 Com R$ ${budget.toFixed(2)} e ${shoppingList.reservaPercent}% reserva (R$ ${reserva.toFixed(2)})`;
             } else {
-                message = `💡 <strong>Sugestão padrão:</strong> Com R$ ${budget.toFixed(2)} e ${shoppingList.reservaPercent}% de reserva (R$ ${reserva.toFixed(2)}), você tem R$ ${budgetForShopping.toFixed(2)} para compras. Quantidades ajustadas para uma família de 2-3 pessoas.`;
-                infoElement.style.background = '#e8f5e8';
+                message = `💡 Com R$ ${budget.toFixed(2)} e ${shoppingList.reservaPercent}% reserva (R$ ${reserva.toFixed(2)})`;
             }
             
             infoElement.innerHTML = message;
@@ -1142,21 +1339,23 @@
 
         function markAllAsBought() {
             if (confirm('Marcar todos os itens como comprados?')) {
-                shoppingList.categories.forEach(category => {
-                    category.subcategories.forEach(subcategory => {
-                        subcategory.items.forEach(item => {
+                shoppingList.categories.forEach((category, categoryIndex) => {
+                    category.subcategories.forEach((subcategory, subcategoryIndex) => {
+                        subcategory.items.forEach((item, itemIndex) => {
                             item.checked = true;
+                            addToComprasList(item, categoryIndex, subcategoryIndex, itemIndex);
                         });
                     });
                 });
                 saveData();
                 renderCategories();
                 updateBudget();
+                renderComprasList();
             }
         }
 
         function resetAll() {
-            if (confirm('Reiniciar toda a lista (desmarcar todos os itens)?')) {
+            if (confirm('Desmarcar todos os itens?')) {
                 shoppingList.categories.forEach(category => {
                     category.subcategories.forEach(subcategory => {
                         subcategory.items.forEach(item => {
@@ -1164,14 +1363,16 @@
                         });
                     });
                 });
+                shoppingList.comprasRealizadas = [];
                 saveData();
                 renderCategories();
                 updateBudget();
+                renderComprasList();
             }
         }
 
         function clearAll() {
-            if (confirm('Isso irá apagar TODOS os dados e voltar aos valores padrão. Continuar?')) {
+            if (confirm('Voltar aos valores padrão?')) {
                 localStorage.removeItem('shoppingList');
                 shoppingList = JSON.parse(JSON.stringify(baseShoppingData));
                 document.getElementById('monthlyBudget').value = 1040;
@@ -1179,6 +1380,7 @@
                 renderCategories();
                 updateBudget();
                 updateSuggestionInfo();
+                renderComprasList();
             }
         }
 
@@ -1193,6 +1395,7 @@
         renderCategories();
         updateBudget();
         updateSuggestionInfo();
+        renderComprasList();
     </script>
 </body>
 </html>
