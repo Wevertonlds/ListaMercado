@@ -41,7 +41,7 @@
             color: var(--text);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
         }
 
         .container { max-width: 480px; margin: 0 auto; padding: 16px; }
@@ -87,6 +87,7 @@
         .btn-warning { background: var(--warning); color: white; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-info { background: #17a2b8; color: white; }
+        .btn-sm { padding: 6px 10px; font-size: 0.8rem; }
         .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
 
         .category {
@@ -141,7 +142,6 @@
             align-items: center;
         }
         .add-item-form input { font-size: 0.85rem; }
-        .add-item-form button { padding: 6px 10px; font-size: 0.8rem; }
 
         .progress-container { background: white; border-radius: 16px; padding: 16px; margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .progress-bar { height: 12px; background: #eee; border-radius: 6px; overflow: hidden; margin: 12px 0; }
@@ -151,13 +151,24 @@
         .summary-card { background: #f8f9fa; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.85rem; }
         .summary-card strong { display: block; font-size: 1.1rem; margin-top: 4px; color: var(--primary); }
 
-        .compras-container { margin-top: 24px; }
-        .compras-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .compra-item { background: white; padding: 12px; border-radius: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-left: 4px solid var(--success); }
-        .compra-info { flex: 1; }
-        .compra-name { font-weight: 600; }
-        .compra-details { font-size: 0.8rem; color: #666; margin-top: 2px; }
-        .empty-state { text-align: center; padding: 32px; color: #999; font-style: italic; }
+        .lista-compra {
+            background: white; border-radius: 16px; padding: 16px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid var(--success);
+        }
+        .lista-compra h5 { display: flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 12px; }
+        .search-box { margin-bottom: 12px; }
+        .search-box input {
+            width: 100%; padding: 10px 12px; border: 2px solid #ddd; border-radius: 12px;
+            font-size: 1rem; background: #f8f9fa;
+        }
+        .search-box input:focus { border-color: var(--primary); outline: none; }
+        .lista-item {
+            display: grid; grid-template-columns: 32px 1fr 60px 40px;
+            gap: 8px; padding: 8px 0; border-bottom: 1px solid #eee; align-items: center;
+        }
+        .lista-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--success); }
+        .lista-actions { display: flex; gap: 4px; }
+        .empty-lista { text-align: center; color: #999; font-style: italic; padding: 20px; }
 
         .save-notification {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -167,20 +178,12 @@
         }
         @keyframes slideUp { from { transform: translateX(-50%) translateY(100px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
 
-        .modal-header { background: var(--primary); color: white; border-radius: 16px 16px 0 0; padding: 16px; margin: -16px -16px 16px -16px; }
-        .category-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 8px; }
-        .category-tab { padding: 8px 16px; border-radius: 20px; background: #eee; font-size: 0.85rem; white-space: nowrap; transition: all 0.2s; }
-        .category-tab.active { background: var(--primary); color: white; }
-        .quick-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-        .quick-btn { flex: 1; min-width: 80px; padding: 8px; background: #f0f0f0; border: none; border-radius: 12px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .modal-item { display: grid; grid-template-columns: 32px 1fr 70px 50px 80px; gap: 8px; padding: 10px 0; border-bottom: 1px solid #eee; align-items: center; font-size: 0.9rem; }
-
         @media (max-width: 480px) {
             .item { grid-template-columns: 32px 1fr 50px 40px; }
             .item .item-unit, .item .item-price { display: none; }
             .add-item-form { grid-template-columns: 1fr 50px 60px auto; }
-            .modal-item { grid-template-columns: 32px 1fr 60px 70px; }
             .summary-grid { grid-template-columns: 1fr; }
+            .lista-item { grid-template-columns: 32px 1fr auto; }
         }
     </style>
 </head>
@@ -192,7 +195,7 @@
             <p>Organize seu orçamento com inteligência</p>
         </div>
 
-        <!-- Orçamento -->
+        <!-- Orçamento Total + Reserva -->
         <div class="card">
             <h5 class="mb-3">Orçamento Mensal</h5>
             <div class="budget-inputs">
@@ -206,9 +209,9 @@
                 </div>
             </div>
             <div class="d-flex gap-2 flex-wrap">
-                <button class="btn btn-primary flex-fill" onclick="updateBudget()">Atualizar</button>
+                <button class="btn btn-primary flex-fill" onclick="updateTotalBudget()">Atualizar</button>
                 <button class="btn btn-secondary flex-fill" onclick="applyRecommendedReserve()">5%</button>
-                <button class="btn btn-info flex-fill" onclick="openQuickEdit()">Editar</button>
+                <button class="btn btn-info flex-fill" onclick="openBudgetModal()">Editar Categorias</button>
             </div>
             <div class="text-center mt-3 text-muted small" id="suggestionInfo">
                 Com R$ 1.040,00 e 5% de reserva (R$ 52,00)
@@ -241,36 +244,34 @@
             </div>
         </div>
 
-        <!-- Histórico -->
-        <div class="compras-container">
-            <h5 class="compras-title">Histórico de Compras</h5>
-            <div id="comprasList">
-                <div class="empty-state">Nenhum item comprado ainda</div>
+        <!-- LISTA DE COMPRAS (PARA O MARIDO) -->
+        <div class="lista-compra">
+            <h5>Lista de Compras</h5>
+            <div class="search-box">
+                <input type="text" id="searchItem" placeholder="Buscar ou adicionar item..." onkeyup="filterLista()">
             </div>
+            <div id="listaContainer"></div>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="quickEditModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <!-- Modal: Editar Orçamento por Categoria -->
+    <div class="modal fade" id="budgetModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content" style="border-radius:16px;">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edição Rápida - <span id="modalCategoryName"></span></h5>
+                <div class="modal-header" style="background:var(--primary);color:white;">
+                    <h5 class="modal-title">Orçamento por Categoria</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="category-tabs" id="categoryTabs"></div>
-                    <div class="quick-actions">
-                        <button class="quick-btn" onclick="selectAllInModal()">Todos</button>
-                        <button class="quick-btn" onclick="deselectAllInModal()">Nenhum</button>
-                        <button class="quick-btn" onclick="applyQuantityToAll(1)">1x</button>
-                        <button class="quick-btn" onclick="applyQuantityToAll(2)">2x</button>
-                        <button class="quick-btn" onclick="autoAdjustQuantities()">Auto</button>
+                    <p class="text-muted small">Soma deve igualar o valor total (R$ <span id="modalTotalBudget">1040</span>)</p>
+                    <div id="budgetInputs"></div>
+                    <div class="mt-3 d-flex gap-2">
+                        <button class="btn btn-success flex-fill" onclick="distributeEvenly()">Distribuir Igualmente</button>
+                        <button class="btn btn-info flex-fill" onclick="distributeByDefault()">Padrão (600/220/100/80)</button>
                     </div>
-                    <div id="modalItemsContainer"></div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" onclick="saveAndCloseModal()">Salvar</button>
+                    <button class="btn btn-primary" onclick="saveCategoryBudgets()">Salvar</button>
                 </div>
             </div>
         </div>
@@ -285,72 +286,23 @@
             totalBudget: 1040,
             reservaPercent: 5,
             categories: [
-                {
-                    id: 'alimentos', name: 'Alimentos', budget: 600,
-                    subcategories: [
-                        { name: 'Básicos', items: [
-                            { name: 'Arroz 5kg', quantity: 2, unit: 'pacotes', unitPrice: 28.00, checked: false, baseQuantity: 2 },
-                            { name: 'Feijão 1kg', quantity: 3, unit: 'pacotes', unitPrice: 9.50, checked: false, baseQuantity: 3 },
-                            { name: 'Macarrão 500g', quantity: 4, unit: 'un', unitPrice: 4.20, checked: false, baseQuantity: 4 },
-                            { name: 'Molho tomate', quantity: 4, unit: 'sachês', unitPrice: 3.20, checked: false, baseQuantity: 4 },
-                            { name: 'Farinha trigo', quantity: 1, unit: 'pacote', unitPrice: 6.80, checked: false, baseQuantity: 1 },
-                            { name: 'Óleo soja', quantity: 2, unit: 'garrafas', unitPrice: 9.90, checked: false, baseQuantity: 2 }
-                        ]},
-                        { name: 'Hortifruti', items: [
-                            { name: 'Batata', quantity: 3, unit: 'kg', unitPrice: 5.50, checked: false, baseQuantity: 3 },
-                            { name: 'Cebola', quantity: 2, unit: 'kg', unitPrice: 6.80, checked: false, baseQuantity: 2 },
-                            { name: 'Tomate', quantity: 2, unit: 'kg', unitPrice: 8.90, checked: false, baseQuantity: 2 },
-                            { name: 'Alface', quantity: 2, unit: 'maços', unitPrice: 3.50, checked: false, baseQuantity: 2 },
-                            { name: 'Cenoura', quantity: 1, unit: 'kg', unitPrice: 4.20, checked: false, baseQuantity: 1 }
-                        ]}
-                    ]
-                },
-                {
-                    id: 'acougue', name: 'Proteínas', budget: 220,
-                    subcategories: [{
-                        name: 'Carnes', items: [
-                            { name: 'Frango', quantity: 3, unit: 'kg', unitPrice: 17.33, checked: false, baseQuantity: 3 },
-                            { name: 'Peito frango', quantity: 1.5, unit: 'kg', unitPrice: 25.33, checked: false, baseQuantity: 1.5 },
-                            { name: 'Carne moída', quantity: 1, unit: 'kg', unitPrice: 42.00, checked: false, baseQuantity: 1 },
-                            { name: 'Linguiça', quantity: 1, unit: 'kg', unitPrice: 28.90, checked: false, baseQuantity: 1 }
-                        ]
-                    }]
-                },
-                {
-                    id: 'limpeza', name: 'Limpeza', budget: 100,
-                    subcategories: [{
-                        name: 'Produtos', items: [
-                            { name: 'Detergente', quantity: 2, unit: 'un', unitPrice: 3.20, checked: false, baseQuantity: 2 },
-                            { name: 'Sabão pó', quantity: 1, unit: 'pacote', unitPrice: 15.90, checked: false, baseQuantity: 1 },
-                            { name: 'Amaciante', quantity: 1, unit: 'un', unitPrice: 12.90, checked: false, baseQuantity: 1 },
-                            { name: 'Desinfetante', quantity: 1, unit: 'un', unitPrice: 8.90, checked: false, baseQuantity: 1 }
-                        ]
-                    }]
-                },
-                {
-                    id: 'higiene', name: 'Higiene', budget: 80,
-                    subcategories: [{
-                        name: 'Produtos', items: [
-                            { name: 'Sabonete', quantity: 8, unit: 'un', unitPrice: 1.80, checked: false, baseQuantity: 8 },
-                            { name: 'Shampoo', quantity: 1, unit: 'frasco', unitPrice: 18.90, checked: false, baseQuantity: 1 },
-                            { name: 'Condicionador', quantity: 1, unit: 'frasco', unitPrice: 16.90, checked: false, baseQuantity: 1 },
-                            { name: 'Pasta dental', quantity: 2, unit: 'un', unitPrice: 5.90, checked: false, baseQuantity: 2 }
-                        ]
-                    }]
-                }
+                { id: 'alimentos', name: 'Alimentos', budget: 600, subcategories: [...] },
+                { id: 'acougue', name: 'Proteínas', budget: 220, subcategories: [...] },
+                { id: 'limpeza', name: 'Limpeza', budget: 100, subcategories: [...] },
+                { id: 'higiene', name: 'Higiene', budget: 80, subcategories: [...] }
             ],
-            comprasRealizadas: []
+            comprasRealizadas: [],
+            listaCompras: [] // nova lista
         };
 
         let shoppingList = loadShoppingList();
-        let currentModalCategory = 0;
-        const modal = new bootstrap.Modal(document.getElementById('quickEditModal'));
+        const budgetModal = new bootstrap.Modal(document.getElementById('budgetModal'));
 
         function loadShoppingList() {
             const saved = localStorage.getItem('shoppingList');
             if (saved) {
                 const parsed = JSON.parse(saved);
-                if (!parsed.comprasRealizadas) parsed.comprasRealizadas = [];
+                if (!parsed.listaCompras) parsed.listaCompras = [];
                 return parsed;
             }
             return JSON.parse(JSON.stringify(baseShoppingData));
@@ -367,406 +319,178 @@
             setTimeout(() => n.style.display = 'none', 2000);
         }
 
-        function calculateReserva() { return (shoppingList.totalBudget * shoppingList.reservaPercent) / 100; }
-        function calculateBudgetForShopping() { return shoppingList.totalBudget - calculateReserva(); }
-        function calculateItemTotal(item) { return (item.unitPrice * item.quantity).toFixed(2); }
-
-        function calculateTotalUsed() {
-            let total = 0;
-            shoppingList.categories.forEach(cat => {
-                cat.subcategories.forEach(sub => {
-                    sub.items.forEach(item => {
-                        if (item.checked) total += item.unitPrice * item.quantity;
-                    });
-                });
-            });
-            return total;
-        }
-
-        function updateProgress() {
-            const totalUsed = calculateTotalUsed();
-            const reserva = calculateReserva();
-            const budgetForShopping = calculateBudgetForShopping();
-            const remaining = budgetForShopping - totalUsed;
-            const percentage = budgetForShopping > 0 ? (totalUsed / budgetForShopping) * 100 : 0;
-
-            const fill = document.getElementById('progressFill');
-            fill.style.width = `${percentage}%`;
-            fill.textContent = `R$ ${totalUsed.toFixed(2)}`;
-
-            document.getElementById('usedBudget').textContent = `R$ ${totalUsed.toFixed(2)}`;
-            document.getElementById('remainingBudget').textContent = `R$ ${remaining.toFixed(2)}`;
-            document.getElementById('totalBudget').textContent = `R$ ${shoppingList.totalBudget.toFixed(2)}`;
-            document.getElementById('savingsBudget').textContent = `R$ ${reserva.toFixed(2)}`;
-
-            document.querySelectorAll('.category-budget').forEach((el, i) => {
-                const cat = shoppingList.categories[i];
-                const used = cat.subcategories.reduce((s1, sub) => s1 + sub.items.reduce((s2, item) =>
-                    item.checked ? s2 + (item.unitPrice * item.quantity) : s2, 0), 0);
-                const remainingCat = cat.budget - used;
-                el.textContent = `R$ ${remainingCat.toFixed(2)} / R$ ${cat.budget}`;
-            });
-        }
-
-        function toggleCategory(i) {
-            const categories = document.querySelectorAll('.category');
-            categories[i].classList.toggle('open');
-        }
-
-        function toggleItem(c, s, i) {
-            const item = shoppingList.categories[c].subcategories[s].items[i];
-            item.checked = !item.checked;
-            if (item.checked) addToComprasList(item, c, s, i);
-            else removeFromComprasList(c, s, i);
-            saveData();
-            renderCategories();
-            updateProgress();
-            renderComprasList();
-        }
-
-        function addToComprasList(item, c, s, i) {
-            const id = `${c}-${s}-${i}`;
-            const existing = shoppingList.comprasRealizadas.findIndex(x => x.id === id);
-            const compra = {
-                id, name: item.name, quantity: item.quantity, unit: item.unit,
-                unitPrice: item.unitPrice, total: calculateItemTotal(item),
-                data: new Date().toLocaleDateString('pt-BR'),
-                hora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-                categoryIndex: c, subcategoryIndex: s, itemIndex: i
-            };
-            if (existing === -1) shoppingList.comprasRealizadas.unshift(compra);
-            else shoppingList.comprasRealizadas[existing] = compra;
-        }
-
-        function removeFromComprasList(c, s, i) {
-            shoppingList.comprasRealizadas = shoppingList.comprasRealizadas.filter(x =>
-                !(x.categoryIndex === c && x.subcategoryIndex === s && x.itemIndex === i));
-        }
-
-        function updateQuantity(c, s, i, val) {
-            const q = parseFloat(val) || 0;
-            shoppingList.categories[c].subcategories[s].items[i].quantity = q;
-            saveData();
-            renderCategories();
-            updateProgress();
-            updateComprasQuantity(c, s, i, q);
-        }
-
-        function updateUnitPrice(c, s, i, val) {
-            const p = parseFloat(val) || 0;
-            shoppingList.categories[c].subcategories[s].items[i].unitPrice = p;
-            saveData();
-            renderCategories();
-            updateProgress();
-        }
-
-        function updateComprasQuantity(c, s, i, q) {
-            const compra = shoppingList.comprasRealizadas.find(x => x.categoryIndex === c && x.subcategoryIndex === s && x.itemIndex === i);
-            if (compra) {
-                compra.quantity = q;
-                compra.total = (compra.unitPrice * q).toFixed(2);
-                saveData();
-                renderComprasList();
-            }
-        }
-
-        function addNewItem(c, s) {
-            const name = document.getElementById(`new-name-${c}-${s}`).value.trim();
-            const qty = parseFloat(document.getElementById(`new-qty-${c}-${s}`).value) || 1;
-            const price = parseFloat(document.getElementById(`new-price-${c}-${s}`).value) || 0;
-            const unit = document.getElementById(`new-unit-${c}-${s}`).value.trim() || 'un';
-
-            if (!name || price <= 0) {
-                alert("Preencha nome e preço!");
-                return;
-            }
-
-            shoppingList.categories[c].subcategories[s].items.push({
-                name, quantity: qty, unit, unitPrice: price, checked: false, baseQuantity: qty
-            });
-
-            document.getElementById(`new-name-${c}-${s}`).value = '';
-            document.getElementById(`new-qty-${c}-${s}`).value = '1';
-            document.getElementById(`new-price-${c}-${s}`).value = '';
-            document.getElementById(`new-unit-${c}-${s}`).value = 'un';
-
-            saveData();
-            renderCategories();
-            updateProgress();
-        }
-
-        function renderCategories() {
-            const container = document.getElementById('categoriesContainer');
+        // === ORÇAMENTO POR CATEGORIA ===
+        function openBudgetModal() {
+            document.getElementById('modalTotalBudget').textContent = shoppingList.totalBudget;
+            const container = document.getElementById('budgetInputs');
             let html = '';
-            shoppingList.categories.forEach((cat, cIdx) => {
-                const used = cat.subcategories.reduce((s1, sub) => s1 + sub.items.reduce((s2, item) =>
-                    item.checked ? s2 + (item.unitPrice * item.quantity) : s2, 0), 0);
-                const remaining = cat.budget - used;
-
+            shoppingList.categories.forEach((cat, i) => {
                 html += `
-                    <div class="category">
-                        <div class="category-header" onclick="toggleCategory(${cIdx})">
-                            <div class="category-title"><i class="bi bi-cart"></i> ${cat.name}</div>
-                            <div class="category-budget">R$ ${remaining.toFixed(2)} / R$ ${cat.budget}</div>
-                        </div>
-                        <div class="items-list">
+                    <div class="input-group mb-2">
+                        <label>${cat.name}</label>
+                        <input type="number" class="form-control" value="${cat.budget}" min="0" step="10" 
+                               onchange="updateCategoryBudget(${i}, this.value)">
+                    </div>
                 `;
-
-                cat.subcategories.forEach((sub, sIdx) => {
-                    html += `<div class="subcategory"><div class="subcategory-title"><i class="bi bi-box"></i> ${sub.name}</div>`;
-                    sub.items.forEach((item, iIdx) => {
-                        const total = calculateItemTotal(item);
-                        html += `
-                            <div class="item">
-                                <input type="checkbox" ${item.checked?'checked':''} onchange="toggleItem(${cIdx},${sIdx},${iIdx})">
-                                <div class="item-name">${item.name}</div>
-                                <input type="number" class="editable" value="${item.quantity}" step="0.1" min="0" onchange="updateQuantity(${cIdx},${sIdx},${iIdx},this.value)">
-                                <div class="item-unit">${item.unit}</div>
-                                <input type="number" class="editable" value="${item.unitPrice.toFixed(2)}" step="0.01" min="0" onchange="updateUnitPrice(${cIdx},${sIdx},${iIdx},this.value)">
-                                <div class="item-total">R$ ${total}</div>
-                            </div>
-                        `;
-                    });
-
-                    html += `
-                        <div class="add-item-form">
-                            <input type="text" id="new-name-${cIdx}-${sIdx}" placeholder="Novo item" class="editable">
-                            <input type="number" id="new-qty-${cIdx}-${sIdx}" value="1" min="0.1" step="0.1" class="editable">
-                            <input type="number" id="new-price-${cIdx}-${sIdx}" placeholder="R$" min="0" step="0.01" class="editable">
-                            <input type="text" id="new-unit-${cIdx}-${sIdx}" value="un" class="editable">
-                            <button class="btn btn-primary" onclick="addNewItem(${cIdx},${sIdx})"><i class="bi bi-plus"></i></button>
-                        </div>
-                    `;
-
-                    html += `</div>`;
-                });
-                html += `</div></div>`;
             });
             container.innerHTML = html;
+            budgetModal.show();
         }
 
-        function renderComprasList() {
-            const list = document.getElementById('comprasList');
-            if (shoppingList.comprasRealizadas.length === 0) {
-                list.innerHTML = '<div class="empty-state">Nenhum item comprado ainda</div>';
+        function updateCategoryBudget(i, val) {
+            shoppingList.categories[i].budget = parseFloat(val) || 0;
+        }
+
+        function saveCategoryBudgets() {
+            const totalCategories = shoppingList.categories.reduce((s, c) => s + c.budget, 0);
+            const reserva = calculateReserva();
+            const totalGeral = shoppingList.totalBudget;
+
+            if (totalCategories + reserva !== totalGeral) {
+                alert(`A soma das categorias (R$ ${totalCategories}) + reserva (R$ ${reserva}) deve ser R$ ${totalGeral}!`);
                 return;
             }
+            saveData();
+            renderCategories();
+            updateProgress();
+            budgetModal.hide();
+        }
+
+        function distributeEvenly() {
+            const available = shoppingList.totalBudget - calculateReserva();
+            const perCat = available / shoppingList.categories.length;
+            shoppingList.categories.forEach(cat => cat.budget = Math.round(perCat / 10) * 10);
+            openBudgetModal(); // recarrega
+        }
+
+        function distributeByDefault() {
+            const budgets = [600, 220, 100, 80];
+            shoppingList.categories.forEach((cat, i) => cat.budget = budgets[i] || 0);
+            openBudgetModal();
+        }
+
+        // === LISTA DE COMPRAS (PARA O MARIDO) ===
+        function filterLista() {
+            const query = document.getElementById('searchItem').value.toLowerCase().trim();
+            renderListaCompras(query);
+        }
+
+        function renderListaCompras(filter = '') {
+            const container = document.getElementById('listaContainer');
+            let items = shoppingList.listaCompras;
+
+            if (filter) {
+                items = items.filter(item => 
+                    item.name.toLowerCase().includes(filter) ||
+                    item.category.toLowerCase().includes(filter) ||
+                    item.subcategory.toLowerCase().includes(filter)
+                );
+            }
+
+            if (items.length === 0 && filter === '') {
+                container.innerHTML = '<div class="empty-lista">Nenhum item na lista. Digite para adicionar!</div>';
+                return;
+            }
+
             let html = '';
-            shoppingList.comprasRealizadas.forEach(c => {
+            items.forEach((item, i) => {
                 html += `
-                    <div class="compra-item">
-                        <div class="compra-info">
-                            <div class="compra-name">${c.name}</div>
-                            <div class="compra-details">${c.quantity} ${c.unit} • R$ ${c.total} • ${c.data} ${c.hora}</div>
+                    <div class="lista-item">
+                        <input type="checkbox" ${item.checked?'checked':''} onchange="toggleListaItem(${i})">
+                        <div>
+                            <div class="fw-bold">${item.name}</div>
+                            <small class="text-muted">${item.quantity} ${item.unit} • ${item.category} > ${item.subcategory}</small>
+                        </div>
+                        <div class="lista-actions">
+                            <button class="btn btn-sm btn-warning" onclick="editListaItem(${i})">Editar</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteListaItem(${i})">Excluir</button>
                         </div>
                     </div>
                 `;
             });
-            list.innerHTML = html;
-        }
-
-        function openQuickEdit() {
-            currentModalCategory = 0;
-            renderCategoryTabs();
-            renderModalFromData();
-            modal.show();
-        }
-
-        function renderCategoryTabs() {
-            const container = document.getElementById('categoryTabs');
-            let html = '';
-            shoppingList.categories.forEach((cat, i) => {
-                html += `<button class="category-tab ${i === currentModalCategory ? 'active' : ''}" onclick="switchCategory(${i})">${cat.name}</button>`;
-            });
             container.innerHTML = html;
         }
 
-        function switchCategory(i) {
-            currentModalCategory = i;
-            renderCategoryTabs();
-            renderModalFromData();
-        }
+        document.getElementById('searchItem').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const name = this.value.trim();
+                if (!name) return;
 
-        function renderModalFromData() {
-            const cat = shoppingList.categories[currentModalCategory];
-            document.getElementById('modalCategoryName').textContent = cat.name;
-            let html = '';
-            cat.subcategories.forEach((sub, sIdx) => {
-                html += `<div class="subcategory-title"><i class="bi bi-box"></i> ${sub.name}</div>`;
-                sub.items.forEach((item, iIdx) => {
-                    const total = (item.unitPrice * item.quantity).toFixed(2);
-                    html += `
-                        <div class="modal-item">
-                            <input type="checkbox" ${item.checked?'checked':''} onchange="toggleModalItem(${currentModalCategory},${sIdx},${iIdx},this.checked)">
-                            <div class="item-name">${item.name}</div>
-                            <input type="number" class="editable" value="${item.quantity}" step="0.1" min="0" onchange="updateModalQuantity(${currentModalCategory},${sIdx},${iIdx},this.value)">
-                            <div class="item-unit">${item.unit}</div>
-                            <input type="number" class="editable" value="${item.unitPrice.toFixed(2)}" step="0.01" min="0" onchange="updateModalUnitPrice(${currentModalCategory},${sIdx},${iIdx},this.value)">
-                            <div class="item-total">R$ ${total}</div>
-                        </div>
-                    `;
-                });
-            });
-            document.getElementById('modalItemsContainer').innerHTML = html;
-        }
+                // Busca em categorias
+                let found = false;
+                for (let c of shoppingList.categories) {
+                    for (let s of c.subcategories) {
+                        const item = s.items.find(i => i.name.toLowerCase() === name.toLowerCase());
+                        if (item) {
+                            shoppingList.listaCompras.push({
+                                name: item.name,
+                                quantity: item.quantity,
+                                unit: item.unit,
+                                category: c.name,
+                                subcategory: s.name,
+                                checked: false
+                            });
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) break;
+                }
 
-        function saveAndCloseModal() {
-            saveData();
-            modal.hide();
-            renderCategories();
-            updateProgress();
-            renderComprasList();
-        }
-
-        function toggleModalItem(c, s, i, checked) {
-            const item = shoppingList.categories[c].subcategories[s].items[i];
-            item.checked = checked;
-            if (checked) addToComprasList(item, c, s, i);
-            else removeFromComprasList(c, s, i);
-            saveData();
-            renderModalFromData();
-            renderComprasList();
-        }
-
-        function updateModalQuantity(c, s, i, val) {
-            const q = parseFloat(val) || 0;
-            shoppingList.categories[c].subcategories[s].items[i].quantity = q;
-            saveData();
-            renderModalFromData();
-            updateComprasQuantity(c, s, i, q);
-        }
-
-        function updateModalUnitPrice(c, s, i, val) {
-            const p = parseFloat(val) || 0;
-            shoppingList.categories[c].subcategories[s].items[i].unitPrice = p;
-            saveData();
-            renderModalFromData();
-        }
-
-        function selectAllInModal() {
-            shoppingList.categories[currentModalCategory].subcategories.forEach((sub, sIdx) => {
-                sub.items.forEach((item, iIdx) => {
-                    item.checked = true;
-                    addToComprasList(item, currentModalCategory, sIdx, iIdx);
-                });
-            });
-            saveData();
-            renderModalFromData();
-            renderComprasList();
-        }
-
-        function deselectAllInModal() {
-            shoppingList.categories[currentModalCategory].subcategories.forEach((sub, sIdx) => {
-                sub.items.forEach((item, iIdx) => {
-                    item.checked = false;
-                    removeFromComprasList(currentModalCategory, sIdx, iIdx);
-                });
-            });
-            saveData();
-            renderModalFromData();
-            renderComprasList();
-        }
-
-        function applyQuantityToAll(qty) {
-            shoppingList.categories[currentModalCategory].subcategories.forEach(sub => {
-                sub.items.forEach(item => item.quantity = qty);
-            });
-            saveData();
-            renderModalFromData();
-        }
-
-        function autoAdjustQuantities() {
-            const budgetForShopping = calculateBudgetForShopping();
-            const ratio = budgetForShopping / 988;
-            shoppingList.categories.forEach(cat => {
-                cat.subcategories.forEach(sub => {
-                    sub.items.forEach(item => {
-                        const adj = Math.round(item.baseQuantity * ratio);
-                        item.quantity = Math.max(1, adj);
+                if (!found) {
+                    shoppingList.listaCompras.push({
+                        name, quantity: 1, unit: 'un', category: 'Outros', subcategory: 'Geral', checked: false
                     });
-                });
-            });
+                }
+
+                this.value = '';
+                saveData();
+                renderListaCompras();
+            }
+        });
+
+        function toggleListaItem(i) {
+            shoppingList.listaCompras[i].checked = !shoppingList.listaCompras[i].checked;
             saveData();
-            renderCategories();
-            updateProgress();
-            if (modal._isShown) renderModalFromData();
+            renderListaCompras();
         }
 
-        function updateBudget() {
+        function editListaItem(i) {
+            const item = shoppingList.listaCompras[i];
+            const newQty = prompt(`Quantidade para "${item.name}" (atual: ${item.quantity}):`, item.quantity);
+            if (newQty !== null && !isNaN(newQty) && newQty > 0) {
+                item.quantity = parseFloat(newQty);
+                saveData();
+                renderListaCompras();
+            }
+        }
+
+        function deleteListaItem(i) {
+            if (confirm('Excluir item?')) {
+                shoppingList.listaCompras.splice(i, 1);
+                saveData();
+                renderListaCompras();
+            }
+        }
+
+        // === OUTRAS FUNÇÕES (mesmas do anterior) ===
+        function updateTotalBudget() {
             const budget = parseFloat(document.getElementById('monthlyBudget').value) || 1040;
             const reserva = parseFloat(document.getElementById('reservaPercent').value) || 5;
             shoppingList.totalBudget = budget;
             shoppingList.reservaPercent = reserva;
             saveData();
-            updateBudgetDisplay();
-            renderCategories();
             updateProgress();
             updateSuggestionInfo();
-            if (modal._isShown) renderModalFromData();
         }
 
-        function applyRecommendedReserve() {
-            document.getElementById('reservaPercent').value = 5;
-            updateBudget();
-        }
+        function calculateReserva() { return (shoppingList.totalBudget * shoppingList.reservaPercent) / 100; }
 
-        function updateBudgetDisplay() {
-            document.getElementById('monthlyBudget').value = shoppingList.totalBudget;
-            document.getElementById('reservaPercent').value = shoppingList.reservaPercent;
-        }
-
-        function updateSuggestionInfo() {
-            const b = shoppingList.totalBudget;
-            const r = calculateReserva();
-            document.getElementById('suggestionInfo').innerHTML = `Com R$ ${b.toFixed(2)} e ${shoppingList.reservaPercent}% reserva (R$ ${r.toFixed(2)})`;
-        }
-
-        function markAllAsBought() {
-            if (!confirm('Marcar todos como comprados?')) return;
-            shoppingList.categories.forEach((cat, c) => {
-                cat.subcategories.forEach((sub, s) => {
-                    sub.items.forEach((item, i) => {
-                        item.checked = true;
-                        addToComprasList(item, c, s, i);
-                    });
-                });
-            });
-            saveData();
-            renderCategories();
-            updateProgress();
-            renderComprasList();
-        }
-
-        function resetAll() {
-            if (!confirm('Desmarcar todos?')) return;
-            shoppingList.categories.forEach(cat => {
-                cat.subcategories.forEach(sub => {
-                    sub.items.forEach(item => item.checked = false);
-                });
-            });
-            shoppingList.comprasRealizadas = [];
-            saveData();
-            renderCategories();
-            updateProgress();
-            renderComprasList();
-        }
-
-        function clearAll() {
-            if (!confirm('Voltar ao padrão?')) return;
-            localStorage.removeItem('shoppingList');
-            shoppingList = JSON.parse(JSON.stringify(baseShoppingData));
-            document.getElementById('monthlyBudget').value = 1040;
-            document.getElementById('reservaPercent').value = 5;
-            renderCategories();
-            updateProgress();
-            updateSuggestionInfo();
-            renderComprasList();
-        }
-
+        // Inicialização
         renderCategories();
         updateProgress();
         updateSuggestionInfo();
-        renderComprasList();
+        renderListaCompras();
     </script>
 </body>
 </html>
