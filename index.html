@@ -286,16 +286,68 @@
             totalBudget: 1040,
             reservaPercent: 5,
             categories: [
-                { id: 'alimentos', name: 'Alimentos', budget: 600, subcategories: [ /* ... itens ... */ ] },
-                { id: 'acougue', name: 'Proteínas', budget: 220, subcategories: [ /* ... */ ] },
-                { id: 'limpeza', name: 'Limpeza', budget: 100, subcategories: [ /* ... */ ] },
-                { id: 'higiene', name: 'Higiene', budget: 80, subcategories: [ /* ... */ ] }
+                {
+                    id: 'alimentos', name: 'Alimentos', budget: 600,
+                    subcategories: [
+                        {
+                            name: 'Básicos', items: [
+                                { name: 'Arroz 5kg', quantity: 2, unit: 'pacotes', unitPrice: 28.00, checked: false, baseQuantity: 2 },
+                                { name: 'Feijão 1kg', quantity: 3, unit: 'pacotes', unitPrice: 9.50, checked: false, baseQuantity: 3 },
+                                { name: 'Macarrão 500g', quantity: 4, unit: 'un', unitPrice: 4.20, checked: false, baseQuantity: 4 },
+                                { name: 'Molho tomate', quantity: 4, unit: 'sachês', unitPrice: 3.20, checked: false, baseQuantity: 4 },
+                                { name: 'Farinha trigo', quantity: 1, unit: 'pacote', unitPrice: 6.80, checked: false, baseQuantity: 1 },
+                                { name: 'Óleo soja', quantity: 2, unit: 'garrafas', unitPrice: 9.90, checked: false, baseQuantity: 2 }
+                            ]
+                        },
+                        {
+                            name: 'Hortifruti', items: [
+                                { name: 'Batata', quantity: 3, unit: 'kg', unitPrice: 5.50, checked: false, baseQuantity: 3 },
+                                { name: 'Cebola', quantity: 2, unit: 'kg', unitPrice: 6.80, checked: false, baseQuantity: 2 },
+                                { name: 'Tomate', quantity: 2, unit: 'kg', unitPrice: 8.90, checked: false, baseQuantity: 2 },
+                                { name: 'Alface', quantity: 2, unit: 'maços', unitPrice: 3.50, checked: false, baseQuantity: 2 },
+                                { name: 'Cenoura', quantity: 1, unit: 'kg', unitPrice: 4.20, checked: false, baseQuantity: 1 }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'acougue', name: 'Proteínas', budget: 220,
+                    subcategories: [{
+                        name: 'Carnes', items: [
+                            { name: 'Frango', quantity: 3, unit: 'kg', unitPrice: 17.33, checked: false, baseQuantity: 3 },
+                            { name: 'Peito frango', quantity: 1.5, unit: 'kg', unitPrice: 25.33, checked: false, baseQuantity: 1.5 },
+                            { name: 'Carne moída', quantity: 1, unit: 'kg', unitPrice: 42.00, checked: false, baseQuantity: 1 },
+                            { name: 'Linguiça', quantity: 1, unit: 'kg', unitPrice: 28.90, checked: false, baseQuantity: 1 }
+                        ]
+                    }]
+                },
+                {
+                    id: 'limpeza', name: 'Limpeza', budget: 100,
+                    subcategories: [{
+                        name: 'Produtos', items: [
+                            { name: 'Detergente', quantity: 2, unit: 'un', unitPrice: 3.20, checked: false, baseQuantity: 2 },
+                            { name: 'Sabão pó', quantity: 1, unit: 'pacote', unitPrice: 15.90, checked: false, baseQuantity: 1 },
+                            { name: 'Amaciante', quantity: 1, unit: 'un', unitPrice: 12.90, checked: false, baseQuantity: 1 },
+                            { name: 'Desinfetante', quantity: 1, unit: 'un', unitPrice: 8.90, checked: false, baseQuantity: 1 }
+                        ]
+                    }]
+                },
+                {
+                    id: 'higiene', name: 'Higiene', budget: 80,
+                    subcategories: [{
+                        name: 'Produtos', items: [
+                            { name: 'Sabonete', quantity: 8, unit: 'un', unitPrice: 1.80, checked: false, baseQuantity: 8 },
+                            { name: 'Shampoo', quantity: 1, unit: 'frasco', unitPrice: 18.90, checked: false, baseQuantity: 1 },
+                            { name: 'Condicionador', quantity: 1, unit: 'frasco', unitPrice: 16.90, checked: false, baseQuantity: 1 },
+                            { name: 'Pasta dental', quantity: 2, unit: 'un', unitPrice: 5.90, checked: false, baseQuantity: 2 }
+                        ]
+                    }]
+                }
             ],
             comprasRealizadas: [],
             listaCompras: []
         };
 
-        // === CARREGAR DADOS ===
         let shoppingList = loadShoppingList();
         const budgetModal = new bootstrap.Modal(document.getElementById('budgetModal'));
 
@@ -320,29 +372,20 @@
             setTimeout(() => n.style.display = 'none', 2000);
         }
 
-        // === AJUSTE AUTOMÁTICO DE RESERVA ===
-        function updateReservaPercent() {
-            const percent = parseFloat(document.getElementById('reservaPercent').value) || 0;
-            shoppingList.reservaPercent = Math.min(100, Math.max(0, percent));
-            saveData();
-            updateSuggestionInfo();
-            updateProgress();
-        }
-
+        // === AJUSTE AUTOMÁTICO ===
         function updateTotalBudget() {
             const total = parseFloat(document.getElementById('monthlyBudget').value) || 0;
-            shoppingList.totalBudget = total;
+            if (total <= 0) return;
 
-            // Recalcula reserva
+            shoppingList.totalBudget = total;
             const reserva = (total * shoppingList.reservaPercent) / 100;
             const available = total - reserva;
 
-            // Ajusta categorias proporcionalmente
             const currentCatTotal = shoppingList.categories.reduce((s, c) => s + c.budget, 0);
             if (currentCatTotal > 0) {
                 const ratio = available / currentCatTotal;
                 shoppingList.categories.forEach(cat => {
-                    cat.budget = Math.round(cat.budget * ratio / 10) * 10;
+                    cat.budget = Math.max(0, Math.round(cat.budget * ratio / 10) * 10);
                 });
             }
 
@@ -352,9 +395,20 @@
             updateSuggestionInfo();
         }
 
-        // === MODAL DE CATEGORIAS ===
+        function updateReservaPercent() {
+            const percent = parseFloat(document.getElementById('reservaPercent').value) || 0;
+            shoppingList.reservaPercent = Math.min(100, Math.max(0, percent));
+            saveData();
+            updateTotalBudget(); // recalcula categorias
+        }
+
+        function applyRecommendedReserve() {
+            document.getElementById('reservaPercent').value = 5;
+            updateReservaPercent();
+        }
+
+        // === MODAL CATEGORIAS ===
         function openBudgetModal() {
-            document.getElementById('modalTotalBudget').textContent = shoppingList.totalBudget;
             const container = document.getElementById('budgetInputs');
             let html = '';
             shoppingList.categories.forEach((cat, i) => {
@@ -372,15 +426,14 @@
 
         function adjustCategoryBudget(i, val) {
             const newVal = parseFloat(val) || 0;
-            const diff = newVal - shoppingList.categories[i].budget;
+            const oldVal = shoppingList.categories[i].budget;
+            const diff = newVal - oldVal;
             shoppingList.categories[i].budget = newVal;
 
-            // Ajusta reserva
-            const reserva = (shoppingList.totalBudget * shoppingList.reservaPercent) / 100;
-            const newReserva = reserva - diff;
-            shoppingList.reservaPercent = (newReserva / shoppingList.totalBudget) * 100;
+            const reservaAtual = (shoppingList.totalBudget * shoppingList.reservaPercent) / 100;
+            const novaReserva = reservaAtual - diff;
+            shoppingList.reservaPercent = (novaReserva / shoppingList.totalBudget) * 100;
 
-            // Atualiza input
             document.getElementById('reservaPercent').value = shoppingList.reservaPercent.toFixed(2);
             updateSuggestionInfo();
         }
@@ -443,10 +496,10 @@
 
                     html += `
                         <div class="add-item-form">
-                            <input type="text" placeholder="Novo item" class="editable">
-                            <input type="number" value="1" min="0.1" step="0.1" class="editable">
-                            <input type="number" placeholder="R$" min="0" step="0.01" class="editable">
-                            <input type="text" value="un" class="editable">
+                            <input type="text" id="new-name-${cIdx}-${sIdx}" placeholder="Novo item" class="editable">
+                            <input type="number" id="new-qty-${cIdx}-${sIdx}" value="1" min="0.1" step="0.1" class="editable">
+                            <input type="number" id="new-price-${cIdx}-${sIdx}" placeholder="R$" min="0" step="0.01" class="editable">
+                            <input type="text" id="new-unit-${cIdx}-${sIdx}" value="un" class="editable">
                             <button class="btn btn-primary" onclick="addNewItem(${cIdx},${sIdx})"><i class="bi bi-plus"></i></button>
                         </div>
                     `;
@@ -458,8 +511,208 @@
             container.innerHTML = html;
         }
 
-        // === OUTRAS FUNÇÕES (toggle, add, etc.) ===
-        // ... (mesmas do código anterior)
+        function toggleCategory(i) {
+            const categories = document.querySelectorAll('.category');
+            categories[i].classList.toggle('open');
+        }
+
+        function toggleItem(c, s, i) {
+            const item = shoppingList.categories[c].subcategories[s].items[i];
+            item.checked = !item.checked;
+            saveData();
+            renderCategories();
+            updateProgress();
+        }
+
+        function updateQuantity(c, s, i, val) {
+            const q = parseFloat(val) || 0;
+            shoppingList.categories[c].subcategories[s].items[i].quantity = q;
+            saveData();
+            renderCategories();
+            updateProgress();
+        }
+
+        function updateUnitPrice(c, s, i, val) {
+            const p = parseFloat(val) || 0;
+            shoppingList.categories[c].subcategories[s].items[i].unitPrice = p;
+            saveData();
+            renderCategories();
+            updateProgress();
+        }
+
+        function addNewItem(c, s) {
+            const name = document.getElementById(`new-name-${c}-${s}`).value.trim();
+            const qty = parseFloat(document.getElementById(`new-qty-${c}-${s}`).value) || 1;
+            const price = parseFloat(document.getElementById(`new-price-${c}-${s}`).value) || 0;
+            const unit = document.getElementById(`new-unit-${c}-${s}`).value.trim() || 'un';
+
+            if (!name || price <= 0) return;
+
+            shoppingList.categories[c].subcategories[s].items.push({
+                name, quantity: qty, unit, unitPrice: price, checked: false, baseQuantity: qty
+            });
+
+            document.getElementById(`new-name-${c}-${s}`).value = '';
+            document.getElementById(`new-qty-${c}-${s}`).value = '1';
+            document.getElementById(`new-price-${c}-${s}`).value = '';
+            document.getElementById(`new-unit-${c}-${s}`).value = 'un';
+
+            saveData();
+            renderCategories();
+            updateProgress();
+        }
+
+        // === PROGRESSO ===
+        function updateProgress() {
+            const totalUsed = shoppingList.categories.reduce((s1, cat) => s1 + cat.subcategories.reduce((s2, sub) => s2 + sub.items.reduce((s3, item) =>
+                item.checked ? s3 + (item.unitPrice * item.quantity) : s3, 0), 0), 0);
+            const reserva = (shoppingList.totalBudget * shoppingList.reservaPercent) / 100;
+            const budgetForShopping = shoppingList.totalBudget - reserva;
+            const remaining = budgetForShopping - totalUsed;
+            const percentage = budgetForShopping > 0 ? (totalUsed / budgetForShopping) * 100 : 0;
+
+            const fill = document.getElementById('progressFill');
+            fill.style.width = `${percentage}%`;
+            fill.textContent = `R$ ${totalUsed.toFixed(2)}`;
+
+            document.getElementById('usedBudget').textContent = `R$ ${totalUsed.toFixed(2)}`;
+            document.getElementById('remainingBudget').textContent = `R$ ${remaining.toFixed(2)}`;
+            document.getElementById('totalBudget').textContent = `R$ ${shoppingList.totalBudget.toFixed(2)}`;
+            document.getElementById('savingsBudget').textContent = `R$ ${reserva.toFixed(2)}`;
+        }
+
+        function updateSuggestionInfo() {
+            const b = shoppingList.totalBudget;
+            const r = (b * shoppingList.reservaPercent) / 100;
+            document.getElementById('suggestionInfo').innerHTML = `Com R$ ${b.toFixed(2)} e ${shoppingList.reservaPercent.toFixed(1)}% reserva (R$ ${r.toFixed(2)})`;
+        }
+
+        // === LISTA DE COMPRAS ===
+        function filterLista() {
+            renderListaCompras(document.getElementById('searchItem').value.toLowerCase().trim());
+        }
+
+        function renderListaCompras(filter = '') {
+            const container = document.getElementById('listaContainer');
+            let items = shoppingList.listaCompras;
+
+            if (filter) {
+                items = items.filter(i => 
+                    i.name.toLowerCase().includes(filter) ||
+                    i.category.toLowerCase().includes(filter) ||
+                    i.subcategory.toLowerCase().includes(filter)
+                );
+            }
+
+            if (items.length === 0 && !filter) {
+                container.innerHTML = '<div class="empty-lista">Digite um item para adicionar!</div>';
+                return;
+            }
+
+            let html = '';
+            items.forEach((item, i) => {
+                html += `
+                    <div class="lista-item">
+                        <input type="checkbox" ${item.checked?'checked':''} onchange="toggleListaItem(${i})">
+                        <div>
+                            <div class="fw-bold">${item.name}</div>
+                            <small class="text-muted">${item.quantity} ${item.unit} • ${item.category} > ${item.subcategory}</small>
+                        </div>
+                        <div class="lista-actions">
+                            <button class="btn btn-sm btn-warning" onclick="editListaItem(${i})"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteListaItem(${i})"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        document.getElementById('searchItem').addEventListener('keypress', function(e) {
+            if (e.key !== 'Enter') return;
+            const name = this.value.trim();
+            if (!name) return;
+
+            let found = false;
+            for (let c of shoppingList.categories) {
+                for (let s of c.subcategories) {
+                    const item = s.items.find(i => i.name.toLowerCase() === name.toLowerCase());
+                    if (item) {
+                        shoppingList.listaCompras.push({
+                            name: item.name, quantity: item.quantity, unit: item.unit,
+                            category: c.name, subcategory: s.name, checked: false
+                        });
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+
+            if (!found) {
+                shoppingList.listaCompras.push({
+                    name, quantity: 1, unit: 'un', category: 'Outros', subcategory: 'Geral', checked: false
+                });
+            }
+
+            this.value = '';
+            saveData();
+            renderListaCompras();
+        });
+
+        function toggleListaItem(i) {
+            shoppingList.listaCompras[i].checked = !shoppingList.listaCompras[i].checked;
+            saveData();
+            renderListaCompras();
+        }
+
+        function editListaItem(i) {
+            const item = shoppingList.listaCompras[i];
+            const newQty = prompt(`Quantidade para "${item.name}" (atual: ${item.quantity}):`, item.quantity);
+            if (newQty !== null && !isNaN(newQty) && newQty > 0) {
+                item.quantity = parseFloat(newQty);
+                saveData();
+                renderListaCompras();
+            }
+        }
+
+        function deleteListaItem(i) {
+            if (confirm('Excluir?')) {
+                shoppingList.listaCompras.splice(i, 1);
+                saveData();
+                renderListaCompras();
+            }
+        }
+
+        // === AÇÕES GERAIS ===
+        function markAllAsBought() {
+            if (!confirm('Marcar todos como comprados?')) return;
+            shoppingList.categories.forEach(cat => cat.subcategories.forEach(sub => sub.items.forEach(item => item.checked = true)));
+            saveData();
+            renderCategories();
+            updateProgress();
+        }
+
+        function resetAll() {
+            if (!confirm('Desmarcar todos?')) return;
+            shoppingList.categories.forEach(cat => cat.subcategories.forEach(sub => sub.items.forEach(item => item.checked = false)));
+            shoppingList.comprasRealizadas = [];
+            saveData();
+            renderCategories();
+            updateProgress();
+        }
+
+        function clearAll() {
+            if (!confirm('Voltar ao padrão?')) return;
+            localStorage.removeItem('shoppingList');
+            shoppingList = JSON.parse(JSON.stringify(baseShoppingData));
+            document.getElementById('monthlyBudget').value = 1040;
+            document.getElementById('reservaPercent').value = 5;
+            renderCategories();
+            updateProgress();
+            updateSuggestionInfo();
+            renderListaCompras();
+        }
 
         // === INICIALIZAR ===
         renderCategories();
